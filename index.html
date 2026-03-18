@@ -1,213 +1,111 @@
 <!DOCTYPE html>
+
 <html lang="pt-br"> 
-<head>
+ <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo da Cobrinha</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
+ <!--
+ <meta viewport>: esta tag é importante para sites que deve funcionar em dispositivos móveis. width-device -
+ -->
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #020617;
-    }
+ <title>Jogo da Cobrinha</title>
 
-    .container{
+ <style>
+
+   .container{
       text-align: center;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background-color: #0f172a; /* fundo escuro */
       padding: 30px;
       border-radius: 20px;
-      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.7);
       color: #e2e8f0;
-      width: fit-content;
-      margin: 40px auto;
-    }
+}
 
-    .info{
-      font-size: 1em;
-    }
+  .info{
+        font-size: 1em;
+  }
 
-    .potuacao{
-      font-weight: bold;
-      color: #22c55e;
-    }
+  .potuacao{
+   font-weight: bold;
+   color: #22c55e; /* verde destaque */
+  }
 
-    .recorde{
-      font-weight: bold;
-      color: #f43f5e;
-    }
+  .recorde{
+   font-weight: bold;
+   color: #f43f5e; /* vermelho suave */
+  }
 
-    #canvas{
-      border: 3px solid #22c55e;
-      border-radius: 10px;
-      background-color: #020617;
-      display: block;
-      margin: 20px auto;
-      box-shadow: 0px 0px 20px rgba(34, 197, 94, 0.5);
-    }
+  #canvas{
+    border: 3px solid #22c55e;
+    border-radius: 10px;
+    background-color: #020617; /* fundo escuro */
+    display: block;
+    margin: 20px auto;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+  }
 
-    .controles{
-      margin-top: 20px;
-    }
+  .controles{
+    margin-top: 20px;
+  }
 
-    button {
-      font-size: 16px;
-      cursor: pointer;
-      background: linear-gradient(135deg, #22c55e, #4ade80);
-      color: #022c22;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      transition: 0.3s;
-      margin: 5px;
-    }
+  button {
+   font-size: 16px;
+   cursor: pointer;
+   background-color: #22c55e; /* verde */
+   color: #022c22;
+   border: none;
+   padding: 8px 12px;
+   border-radius: 8px;
+  }
 
-    button:hover {
-      background: linear-gradient(135deg, #16a34a, #22c55e);
-      transform: scale(1.05);
-    }
+  button:hover{
+    background-color: #16a34a;
+  }
 
-  </style>
-</head>
+ </style>
 
-<body>
+ </head>
+
+ <body>
     
-  <div class="container">
 
-    <h1>🐍 Jogo da Cobrinha</h1>  
+    <div  class="container">
 
-    <div class="info">
-      <div class="potuacao">
-        Pontuação: <span id="pontos">0</span>
-      </div>
+    <h1>&#128013; Jogo da Cobrinha 
+    </h1>  
 
-      <div class="recorde">
-        Recorde: <span id="recorde">0</span>
-      </div>
-    </div>
+   <div class="info">
+   <div class="potuacao">
+     Pontuacao: <span id="pontos"> 0 </span>
+   </div>
 
-    <canvas id="canvas" width="400" height="400"></canvas>
+<div class="recorde">
+  Recorde: <span id="recorde"> 0 </span>
+</div>
+
+   </div>
+  <canvas id="canvas" width="400" height="400">
+  <!--
+    <canvas> é um elemento  especial para desenho 2d ou 3d.Por si só
+    é apenas um retangulo vazio. O Java Script vai usar o "contexto 2d"
+    para desenhar a cobra, e comida, etc.
+
+    nah nah nah nahnahnah hey jude!
+  
+  -->
+
+  </canvas>
 
     <div class="controles">
-      <button onclick="iniciarJogo()">Iniciar Jogo</button>
-      <button onclick="pausarJogo()">Pausar / Continuar</button>
+
+      <button onclick="alert('Em construção')">Iniciar Jogo</button>
+
+      <button >Pausar / Continuar</button>
+
     </div>
 
-  </div>
+    </div>
+ </body>
 
-<script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-let box = 20;
-let snake;
-let direction;
-let food;
-let pontos;
-let jogo;
-let pausado = false;
-
-function iniciarJogo() {
-  snake = [{ x: 200, y: 200 }];
-  direction = "RIGHT";
-  food = gerarComida();
-  pontos = 0;
-  document.getElementById("pontos").innerText = pontos;
-
-  if (jogo) clearInterval(jogo);
-  jogo = setInterval(desenhar, 120);
-}
-
-function pausarJogo() {
-  pausado = !pausado;
-}
-
-function gerarComida() {
-  return {
-    x: Math.floor(Math.random() * 20) * box,
-    y: Math.floor(Math.random() * 20) * box
-  };
-}
-
-document.addEventListener("keydown", mudarDirecao);
-
-function mudarDirecao(event) {
-  if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-  if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-  if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-  if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-}
-
-function desenhar() {
-  if (pausado) return;
-
-  ctx.clearRect(0, 0, 400, 400);
-
-  // Cobra
-  for (let i = 0; i < snake.length; i++) {
-    ctx.fillStyle = i === 0 ? "#22c55e" : "#4ade80";
-    ctx.fillRect(snake[i].x, snake[i].y, box, box);
-  }
-
-  // Comida
-  ctx.fillStyle = "#f43f5e";
-  ctx.fillRect(food.x, food.y, box, box);
-
-  let headX = snake[0].x;
-  let headY = snake[0].y;
-
-  if (direction === "LEFT") headX -= box;
-  if (direction === "RIGHT") headX += box;
-  if (direction === "UP") headY -= box;
-  if (direction === "DOWN") headY += box;
-
-  // Comer comida
-  if (headX === food.x && headY === food.y) {
-    pontos++;
-    document.getElementById("pontos").innerText = pontos;
-    food = gerarComida();
-  } else {
-    snake.pop();
-  }
-
-  let novaCabeca = { x: headX, y: headY };
-
-  // Colisão com parede
-  if (headX < 0 || headY < 0 || headX >= 400 || headY >= 400 || colisao(novaCabeca, snake)) {
-    clearInterval(jogo);
-    atualizarRecorde();
-    alert("Game Over!");
-  }
-
-  snake.unshift(novaCabeca);
-}
-
-function colisao(cabeca, corpo) {
-  for (let i = 0; i < corpo.length; i++) {
-    if (cabeca.x === corpo[i].x && cabeca.y === corpo[i].y) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function atualizarRecorde() {
-  let recorde = localStorage.getItem("recorde") || 0;
-  if (pontos > recorde) {
-    localStorage.setItem("recorde", pontos);
-    document.getElementById("recorde").innerText = pontos;
-  } else {
-    document.getElementById("recorde").innerText = recorde;
-  }
-}
-
-// Carregar recorde ao abrir
-window.onload = function() {
-  let recorde = localStorage.getItem("recorde") || 0;
-  document.getElementById("recorde").innerText = recorde;
-};
-</script>
-
-</body>
 </html>
