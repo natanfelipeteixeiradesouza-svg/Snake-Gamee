@@ -1,200 +1,128 @@
-<!DOCTYPE html>
+<style>
 
-<html lang="pt-br"> 
- <head>
-  <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
- <!--
- <meta viewport>: esta tag é importante para sites que deve funcionar em dispositivos móveis. width-device -
- -->
-
- <title>Jogo da Cobrinha</title>
-
- <style>
-
-   .container{
-      text-align: center;
-      background-color: #0f172a; /* fundo escuro */
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.7);
-      color: #e2e8f0;
+body{
+  background: radial-gradient(circle at top, #0f0f1a, #020617);
+  font-family: Arial, sans-serif;
 }
 
+.container{
+  text-align: center;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 40px #00f0ff33;
+  color: #e0f7ff;
+  border: 1px solid #00f0ff55;
+}
+
+.info{
+  font-size: 1em;
+}
+
+.potuacao{
+  font-weight: bold;
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
+}
+
+.recorde{
+  font-weight: bold;
+  color: #ff00c8;
+  text-shadow: 0 0 10px #ff00c8;
+}
+
+#canvas{
+  border: 3px solid #00f0ff;
+  border-radius: 10px;
+  background-color: #01030a;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 
+    0px 0px 20px #00f0ff,
+    inset 0px 0px 20px #00f0ff22;
+}
+
+.controles{
+  margin-top: 20px;
+}
+
+button {
+  font-size: 16px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #00f0ff, #0066ff);
+  color: #001018;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin: 5px;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00f0ff88;
+}
+
+button:hover{
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #00f0ff;
+}
+
+.teclas{
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  gap: 8px;
+  justify-content: center;
+  margin: 15px auto;
+}
+
+.tecla{
+  width: 50px;
+  height: 50px;
+  background: #020617;
+  color: #00f0ff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #00f0ff55;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00f0ff33;
+}
+
+.tecla:active{
+  background-color: #00f0ff;
+  color: #001018;
+}
+
+.tecla.vazio{
+  background-color: transparent;
+  cursor: default;
+  box-shadow: none;
+  border: none;
+}
+
+.instrucoes{
+  margin-top: 20px;
+  padding: 15px;
+  background: linear-gradient(45deg, #00f0ff, #ff00c8);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #001018;
+  box-shadow: 0 0 20px #00f0ff55;
+}
+
+.instrucoes h3{
+  margin-bottom: 10px;
+  color: #000;
+}
+
+@media (max-width:600px){
+  h1{
+    font-size: 1.8em;
+  }
   .info{
-        font-size: 1em;
-  }
-
-  .potuacao{
-   font-weight: bold;
-   color: #22c55e; /* verde destaque */
-  }
-
-  .recorde{
-   font-weight: bold;
-   color: #f43f5e; /* vermelho suave */
-  }
-
-  #canvas{
-    border: 3px solid #22c55e;
-    border-radius: 10px;
-    background-color: #020617; /* fundo escuro */
-    display: block;
-    margin: 20px auto;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
-  }
-
-  .controles{
-    margin-top: 20px;
-  }
-
-  button {
-   font-size: 16px;
-   cursor: pointer;
-   background-color: #22c55e; /* verde */
-   color: #022c22;
-   border: none;
-   padding: 8px 12px;
-   border-radius: 8px;
-   margin: 5px;
-   transition: all 0.3s ease;
-   
-  }
-  .teclas{
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    gap: 5px;
-    justify-content: center;
-    margin: 15px auto;
-  }
-
-  .tecla{
-    width: 50px;
-    height: 50px;
-    background-color: #000307;
-    color: #e2e8f0;
-    border-radius: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-  }
-  .tecla:active{
-    background-color: #22c55e;
-  }
-   .tecla.vazio{
-    background-color: transparent;
-    cursor: default;
-   }
-
-   .instrucoes{
-     margin-top: 20px;
-     padding: 15px;
-     background-color: #22c55e;
-     border-radius: 10px;
-     font-size: 14px;
-     color: #022c22;
-
-   }
-
-   .instrucoes h3{
-    margin-bottom: 10px;
-    color: #000307;
-   }
-    
-  button:hover{
-    background-color: #16a34a;
-  }
-
-  @media (max-width:600px){
-    h1{
-      font-size: 1.8em;
-    }
-   .info{
     font-size: 1em;
-   }
   }
-
- </style>
-
- </head>
-
- <body>
-    
-
-    <div  class="container">
-
-    <h1>&#128013; Jogo da Cobrinha 
-    </h1>  
-
-   <div class="info">
-   <div class="potuacao">
-     Pontuacao: <span id="pontos"> 0 </span>
-   </div>
-
-<div class="recorde">
-  Recorde: <span id="recorde"> 0 </span>
-</div>
-
-   </div>
-  <canvas id="canvas" width="400" height="400">
-  <!--
-    <canvas> é um elemento  especial para desenho 2d ou 3d.Por si só
-    é apenas um retangulo vazio. O Java Script vai usar o "contexto 2d"
-    para desenhar a cobra, e comida, etc.
-
-    nah nah nah nahnahnah hey jude!
-  
-  -->
-
-  </canvas>
-
-    <div class="controles">
-
-      <button onclick="alert('Em construção')">Iniciar Jogo</button>
-      <button >Pausar / Continuar</button>
-
-      <div class="teclas">
-
-         <div class="tecla vazio"></div>
-         <div class="tecla" onclick="mudarDirecao('cima')">&#9650;</div>
-         <div class="tecla vazio"></div>
-         <div class="tecla" onclick="mudarDirecao('esquerda')">&#9668;</div>
-         <div class="tecla" onclick="mudarDirecao('baixo')">&#9660;</div>
-         <div class="tecla" onclick="mudarDirecao('direita')">&#9658;</div>
-         
-        
-      </div>
-    
-     <div class="instrucoes">
-      <h3>Como Jogar:</h3>
-      <p>Use as setas de teclado ou os butões acima para controlar a cobra</p>
-      <p>Coma as maçãs vermelhas &#127822; para crescer e ganhar pontos</p>
-      <p>Não bata nas paredes nem no próprio corpo</p>
-
-    </div>
-
-<script>
-
-function mudarDirecao(novaDirecao){
-  console.log(novaDirecao)
-}
-function iniciarJogo(){
-  console.log('Jogo começou!!');
 }
 
-function pausarJogo(){
-  console.log('Pausa no Jogo!!');
-}
-
-
-</script>
-
-    
- </body>
-
-</html>
+</style>
