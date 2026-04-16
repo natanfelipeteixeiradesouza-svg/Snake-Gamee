@@ -231,9 +231,16 @@ let intervalo;       //Controla a velocidade do jogo
 //CARREGAR RECORDE DO NAVEGADOR
 //===============================
 
-recorde = localStorage.getItem('recordeCobrinha') || 1588;
+recorde = localStorage.getItem('recordeCobrinha') || 0;
 document.getElementById('recorde').textContent = recorde;
 
+function iniciarJogo(){
+  cobra = [
+    {x: 10, y: 10,},
+    {x:  9, y: 10,},
+    {x:  8, y: 10,},
+  ];
+}
 
 function mudarDirecao(novaDirecao){
   console.log(novaDirecao)
