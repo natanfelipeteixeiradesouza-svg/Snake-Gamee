@@ -207,6 +207,34 @@ button:hover{
   //=======================
 
   const canvas = document.getElementById('canvas'); 
+  const ctx = canvas.getContext('2d');
+
+  //tamanho de cada quadrado no jogo
+  const tamanhoQuadrado = 20;
+  // quantos quadrados cabem na largura e altura do espaço 20
+  const quantidadeQuadrados = canvas.width / tamanhoQuadrado;
+
+  //===================
+  //VARIÁVEIS DO JOGO
+  //===================
+let cobra;                   //Array que guarda as posições da cobra
+let direcao;                //Diceção atual da cobra
+let proximaDirecao;        //Proxima Direção (evita viradas impossíveis)
+let comida;               //Posição da comida
+let pontos;              //Pontuação atual 
+let recorde;            //Melhor pontuação
+let jogoAtivo;         //Se o Jogo está rodando
+let jogoPausado;      //Se o jogo está pausado
+let intervalo;       //Controla a velocidade do jogo
+
+//===============================
+//CARREGAR RECORDE DO NAVEGADOR
+//===============================
+
+recorde = localStorage.getItem('recordeCobrinha') || 1588;
+document.getElementById('recorde').textContent = recorde;
+
+
 function mudarDirecao(novaDirecao){
   console.log(novaDirecao)
 }
