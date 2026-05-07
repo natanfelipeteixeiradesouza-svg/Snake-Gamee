@@ -274,7 +274,27 @@ function atualizarJogo(){
 
 direcao = proximaDirecao;
 
+ let cabeca = {...cobra[0]}
+
+//Mover a cabeça para a direção atual
+
+
+
+desenhar();
+  }
+//===================================================
+//FUNÇÃO PARA DESENHAR OS ELEMENTOS VISUAIS DO JOGO  
+//===================================================
+function desenhar(){
+   //LIMPAR O FUNDO DO CANVAS
+    ctx.fillstyle = '#f0f0f0';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    //Desenhar a grade (opsional, para a visualização)
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 0.5;
 }
+
 
 //=========================
 //FUNÇÃO PARA GERAR COMIDA
@@ -305,7 +325,9 @@ function gerarComida(){
 }
 
 function mudarDirecao(novaDirecao){
-  console.log(novaDirecao)
+  //bem aqui vai aparecer um bug
+    proximaDirecao = novaDirecao;
+  }
 }
 function iniciarJogo(){
   console.log('Jogo começou!!');
