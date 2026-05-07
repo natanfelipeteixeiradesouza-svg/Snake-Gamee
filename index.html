@@ -254,6 +254,9 @@ jogoPausado = false;
 document.getElementById('pontos').textContent = pontos;
 
 gerarComida();
+if(intervaloJogo){
+  clearInterval(intervaloJogo);
+}
 
 //executa a função atualizar Jogo a cada 100 milisegundos
   intervaloJogo = setInterval(atualizarJogo, 100);
@@ -265,7 +268,12 @@ gerarComida();
 //=================================
 
 function atualizarJogo(){
-  console.log('atualizou!!!');
+  if(!jogoAtivo || jogoPausado){
+    return;
+  }
+
+direcao = proximaDirecao;
+
 }
 
 //=========================
