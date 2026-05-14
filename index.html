@@ -238,109 +238,108 @@ recorde = localStorage.getItem('recordeCobrinha') || 0;
 document.getElementById('recorde').textContent = recorde;
 
 function iniciarJogo(){
-  cobra = [
-    {x: 10, y: 10,},
-    {x:  9, y: 10,},
-    {x:  8, y: 10,},
-  ];
+                cobra = [
+                    { x: 10, y: 10},
+                    { x: 9,  y: 10},
+                    { x: 8,  y: 10},
+                ];
 
-direcao = 'direita';
-proximaDirecao = 'direita';
-pontos = 0;
-jogoAtivo = true;
-jogoPausado = false;
+                direcao = 'direita';
+                proximaDirecao = 'direita';
+                pontos = 0;
+                jogoAtivo = true;
+                jogoPausado = false;
 
+                document.getElementById ('pontos').textContent = pontos;
+                
+                gerarComida();
 
-document.getElementById('pontos').textContent = pontos;
+            //Limpar o intervalo anterior se existir
 
-gerarComida();
-if(intervaloJogo){
-  clearInterval(intervaloJogo);
-}
-
-//executa a função atualizar Jogo a cada 100 milisegundos
-  intervaloJogo = setInterval(atualizarJogo, 100);
-}
+                if(intervaloJogo){
+                    clearInterval(intervaloJogo);
+                }
 
 
-//=================================
-// FUNÇÃO PRINCIPAL DO JOGO (LOOP)
-//=================================
-
-function atualizarJogo(){
-  if(!jogoAtivo || jogoPausado){
-    return;
-  }
-
-direcao = proximaDirecao;
-
- let cabeca = {...cobra[0]}
-
-//Mover a cabeça para a direção atual
+            //======================================================
+            //Executa a função atualizarJogo a cada 100 milisegundos
+            //======================================================
 
 
+                intervaloJogo = setInterval(atualizarJogo, 100);
 
-desenhar();
-  }
-//===================================================
-//FUNÇÃO PARA DESENHAR OS ELEMENTOS VISUAIS DO JOGO  
-//===================================================
-function desenhar(){
-   //LIMPAR O FUNDO DO CANVAS
-    ctx.fillstyle = '#f0f0f0';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            //===============================
+            //FUNÇÃO PRINCIPAL DO JOGO (LOOP)
+            //===============================
 
-    //Desenhar a grade (opcional, para a visualização)
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 0.5;
-}
+                function atualizarJogo(){
+                    if(!jogoAtivo || jogoPausado){
+                        return;
+                    }
 
+                    direcao = proximaDirecao;
 
-//=========================
-//FUNÇÃO PARA GERAR COMIDA
-//=========================
+                    let cabeca = {...cobra[0]}
 
-function gerarComida(){
-  let posicaoValida = false;
+                
 
-  while(!posicaoValida){
+                        //mover a cabeça na direção atual
+                    desenhar();
+                }
 
-    //GERA UMA POSIÇÃO ALEATÓRIA PARA A COMIDA
-   comida = {
-    x: Math.floor(Math.random() *quantidadeQuadrados),
-    y: Math.floor(Math.random() *quantidadeQuadrados)
-   }
-  }
- 
-  //VERIFICAR SE A COMIDA NÃO ESTÁ EM CIMA DA COBRA
-  posicaoValida = true;
+                function desenhar(){
+                    //limpar o fundo do canvas
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  for(let pedaco of cobra){
+                    //desenhar a grade (opcional, para visualizção)
+                    ctx.strokeStyle = '#e0e0e';
+                    ctx.lineWidth = 0.5;
 
-    if(comida.x ===pedaco.x && comida.y === pedaco.y){
-      posicaoValida = false;
-      break;
-    }
-  }
-}
+                    ctx.fill();
+                }
 
-function mudarDirecao(novaDirecao){
-  //bem aqui vai aparecer um bug
-    proximaDirecao = novaDirecao;
-  }
+            
 
-function iniciarJogo(){
-  console.log('Jogo começou!!');
-}
-
-function pausarJogo(){
-  console.log('Pausa no Jogo!!');
-}
+            //==============================
+            //Função para gerar comida
+            //==============================
+               
 
 
-</script>
+                 function gerarComida(){
+                    let posicaovalida = false
+                    while(!posicaovalida){
+                        comida = {
+                            x : Math.floor(Math.random() * quantidadeQuadrados),
+                            y : Math.floor(Math.random() * quantidadeQuadrados)
+                        }
 
-    
- </body>
+                        //verificar se a comida não está em cima da cobra
+                        posicaovalida = true;
 
+                        for(let pedaco of cobra){
+
+                            if(comida.x === pedaco.x && comida.y === pedaco.y){
+                                posicaovalida = false;
+                                break;
+                            }
+                        }
+                     }
+                  }
+
+            function mudarDirecao(novaDirecao){
+                //bem aqui vai aparecer um bug
+                proximaDirecao = novaDirecao;
+            }
+            
+            function pausarJogo(){
+                console.log('Pausa no Jogo!!')
+            }
+
+        </script>
+
+    </body>
 </html>
