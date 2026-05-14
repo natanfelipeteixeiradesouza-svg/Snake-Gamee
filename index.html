@@ -290,14 +290,22 @@ button:hover{
 
                 function desenhar(){
                     //limpar o fundo do canvas
-                    ctx.fillStyle = '#000000FF';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+                    ctx.fillStyle = '#f0f0f0';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    //desenhar a grade (opcional, para visualizção)
+                    //PASSO 2
+                    //Desenhar a grade (linhas de referência)
+              
                     ctx.strokeStyle = '#e0e0e';
                     ctx.lineWidth = 0.5;
 
-                    ctx.fill();
+                  for(let i = 0; i <= quantidadeQuadrados; i++){
+                    //Linha vertical
+                    ctx.beginPath();
+                    ctx.meveTo(i* tamanhoQuadrado, 0);
+                    ctx.lineTo(i* tamanhoQuadrado, canvas.height);
+                    ctx.stroke();
+                  }
                 }
 
             
