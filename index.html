@@ -237,110 +237,58 @@ let intervalo;       //Controla a velocidade do jogo
 recorde = localStorage.getItem('recordeCobrinha') || 0;
 document.getElementById('recorde').textContent = recorde;
 
-function iniciarJogo(){
-  cobra = [
-    {x: 10, y: 10,},
-    {x:  9, y: 10,},
-    {x:  8, y: 10,},
-  ];
+   function iniciarJogo(){
+                cobra = [
+                    { x: 10, y: 10},
+                    { x: 9,  y: 10},
+                    { x: 8,  y: 10},
+                ];
 
-direcao = 'direita';
-proximaDirecao = 'direita';
-pontos = 0;
-jogoAtivo = true;
-jogoPausado = false;
+                direcao = 'direita';
+                proximaDirecao = 'direita';
+                pontos = 0;
+                jogoAtivo = true;
+                jogoPausado = false;
 
+                document.getElementById('pontos').textContent = pontos;
 
-document.getElementById('pontos').textContent = pontos;
+                gerarComida();
+            }
 
-gerarComida();
-if(intervaloJogo){
-  clearInterval(intervaloJogo);
-}
+            //=============================
+            //====FUNÇÃO PARA GERAR COMIDA
+            //=============================
+            function gerarComida(){
+                let posicaoValida = false;
 
-//executa a função atualizar Jogo a cada 100 milisegundos
-  intervaloJogo = setInterval(atualizarJogo, 100);
-}
+                while(!posicaoValida){
+                    //gera uma posição aleatória para a comida
+                    comida = {
+                        x : Math.floor(Math.random() * quantidadeQuadrados),
+                        y : Math.floor(Math.random() * quantidadeQuadrados)
+                    }
 
+                    //verificar se a comida não está em cima da cobra
+                    posicaoValida = true;
+                    
+                    for(let pedaco of cobra){
+                        if(comida.x === pedaco.x && comida.y === pedaco.y ){
+                            posicaoValida = false;
+                            break;
+                        }
+                    }
+                }
+            }
 
-//=================================
-// FUNÇÃO PRINCIPAL DO JOGO (LOOP)
-//=================================
+            function mudarDirecao(novaDirecao){
+                console.log(novaDirecao)
+            }
+            
+            function pausarJogo(){
+                console.log('Pausa no Jogo!!')
+            }
 
-function atualizarJogo(){
-  if(!jogoAtivo || jogoPausado){
-    return;
-  }
+        </script>
 
-direcao = proximaDirecao;
-
- let cabeca = {...cobra[0]}
-
-//Mover a cabeça para a direção atual
-
-
-
-desenhar();
-  }
-//===================================================
-//FUNÇÃO PARA DESENHAR OS ELEMENTOS VISUAIS DO JOGO  
-//===================================================
-function desenhar(){
-   //LIMPAR O FUNDO DO CANVAS
-    ctx.fillstyle = '#000000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    //Desenhar a grade (opsional, para a visualização)
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 0.5;
-}
-
-
-//=========================
-//FUNÇÃO PARA GERAR COMIDA
-//=========================
-
-function gerarComida(){
-  let posicaoValida = false;
-
-  while(!posicaoValida){
-
-    //GERA UMA POSIÇÃO ALEATÓRIA PARA A COMIDA
-   comida = {
-    x: Math.floor(Math.random() *quantidadeQuadrados),
-    y: Math.floor(Math.random() *quantidadeQuadrados)
-   }
-  }
- 
-  //VERIFICAR SE A COMIDA NÃO ESTÁ EM CIMA DA COBRA
-  posicaoValida = true;
-
-  for(let pedaco of cobra){
-
-    if(comida.x ===pedaco.x && comida.y === pedaco.y){
-      posicaoValida = false;
-      break;
-    }
-  }
-}
-
-function mudarDirecao(novaDirecao){
-  //bem aqui vai aparecer um bug
-    proximaDirecao = novaDirecao;
-  }
-
-function iniciarJogo(){
-  console.log('Jogo começou!!');
-}
-
-function pausarJogo(){
-  console.log('Pausa no Jogo!!');
-}
-
-
-</script>
-
-    
- </body>
-
+    </body>
 </html>
