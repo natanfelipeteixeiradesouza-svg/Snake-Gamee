@@ -175,69 +175,68 @@ button:hover{
 
   </canvas>
 
-     <div  class="controles">
+       <div  class="controles">
                 
-                <button onclick="iniciarJogo()">Iniciar Jogo</button>
-                <button onclick="pausarJogo()">Pausar / Continuar</button>
+                <button onclick="iniciarJogo();">Iniciar Jogo</button>
+                <button onclick="pause();">pausar / continuar</button>
 
             </div>
-        
 
-      <div class="teclas">
+            <div class="teclas">
 
-         <div class="tecla vazio"></div>
-         <div class="tecla" onclick="mudarDirecao('cima')">&#9650;</div>
-         <div class="tecla vazio"></div>
-         <div class="tecla" onclick="mudarDirecao('esquerda')">&#9668;</div>
-         <div class="tecla" onclick="mudarDirecao('baixo')">&#9660;</div>
-         <div class="tecla" onclick="mudarDirecao('direita')">&#9658;</div>
-         
-        
-      </div>
-    
-     <div class="instrucoes">
-      <h3>Como Jogar:</h3>
-      <p>Use as setas de teclado ou os butões acima para controlar a cobra</p>
-      <p>Coma as maçãs vermelhas &#127822; para crescer e ganhar pontos</p>
-      <p>Não bata nas paredes nem no próprio corpo</p>
+                <div class="tecla vazio"></div>
+                <div class="tecla" onclick="mudarDirecao('cima')" >&#9650;</div>
+                <div class="tecla vazio"></div>
+                <div class="tecla" onclick="mudarDirecao('esquerda')" >&#9668;</div>
+                <div class="tecla" onclick="mudarDirecao('baixo')" >&#9660;</div>
+                <div class="tecla" onclick="mudarDirecao('direita')" >&#9658;</div>
 
-    </div>
+            </div>
 
-<script>
+            <div class="instrucoes">
+                <h3>Como Jogar:</h3>
+                <p>Use as setas de teclado ou os botões acima para controlar a cobra</p>
+                <p>Coma as maçãs vermelhas &#127822; para crescer e ganhar pontos</p>
+                <p>Não bata nas paredes nem no próprio corpo</p>
+            </div>
 
-  //=======================
-  //CONFIGURAÇÕES DO JOGO
-  //=======================
+        </div>
 
-  const canvas = document.getElementById('canvas'); 
-  const ctx = canvas.getContext('2d');
+        <script>
 
-  //tamanho de cada quadrado no jogo
-  const tamanhoQuadrado = 20;
-  // quantos quadrados cabem na largura e altura do espaço 20
-  const quantidadeQuadrados = canvas.width / tamanhoQuadrado;
+            //=============================
+            // CONFIGURAÇÕES DO JOGO
+            //=============================
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            // tamanho de cada quadrado no jogo
+            const tamanhoQuadrado = 20;
+            // quantos quadrados cabem na largura e altura do espaço 2D
+            const quantidadeQuadrados = canvas.width / tamanhoQuadrado;
 
-  //===================
-  //VARIÁVEIS DO JOGO
-  //===================
-let cobra;                   //Array que guarda as posições da cobra
-let direcao;                //Diceção atual da cobra
-let proximaDirecao;        //Proxima Direção (evita viradas impossíveis)
-let comida;               //Posição da comida
-let pontos;              //Pontuação atual 
-let recorde;            //Melhor pontuação
-let jogoAtivo;         //Se o Jogo está rodando
-let jogoPausado;      //Se o jogo está pausado
-let intervalo;       //Controla a velocidade do jogo
+            //============================
+            // Variáveis do Jogo
+            //============================
+            let cobra;              // Array (vetor) que guarda as posições da cobra
+            let direcao;            // Direção atual da cobra
+            let proximaDirecao;     // Próxima direção (evita viradas impossíveis)
+            let comida;             // Posição da comida
+            let pontos;             // Pontuação atual
+            let recorde;            // Melhor pontuação
+            let jogoAtivo;          // Se o jogo está rodando
+            let jogoPausado;        // Se o jogo está pausado
+            let intervaloJogo;      // Controla a velocidade do jogo
 
-//===============================
-//CARREGAR RECORDE DO NAVEGADOR
-//===============================
+            //==============================
+            // Carregar recorde do Navegador
+            //==============================
+            recorde = localStorage.getItem('recordeCobrinha') || 0;
+            document.getElementById('recorde').textContent = recorde;
 
-recorde = localStorage.getItem('recordeCobrinha') || 0;
-document.getElementById('recorde').textContent = recorde;
-
-function iniciarJogo(){
+            //==============================
+            // Função para inicar o Jogo
+            //==============================
+            function iniciarJogo(){
                 cobra = [
                     { x: 10, y: 10},
                     { x: 9,  y: 10},
@@ -291,10 +290,8 @@ function iniciarJogo(){
 
                 function desenhar(){
                     //limpar o fundo do canvas
-                    ctx.fillStyle = '#f0f0f0';
+                    ctx.fillStyle = '#000000';
                     ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-
 
                     //desenhar a grade (opcional, para visualizção)
                     ctx.strokeStyle = '#e0e0e';
