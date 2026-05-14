@@ -302,7 +302,7 @@ button:hover{
                   for(let i = 0; i <= quantidadeQuadrados; i++){
                     //Linha vertical
                     ctx.beginPath();
-                    ctx.meveTo(i* tamanhoQuadrado, 0);
+                    ctx.moveTo(i* tamanhoQuadrado, 0);
                     ctx.lineTo(i* tamanhoQuadrado, canvas.height);
                     ctx.stroke();
                   }
