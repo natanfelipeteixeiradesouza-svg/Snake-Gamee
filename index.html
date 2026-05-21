@@ -289,7 +289,8 @@ button:hover{
                 }
 
                 function desenhar(){
-                    //limpar o fundo do canvas
+                  //PASSO 1
+                 //limpar o fundo do canvas
                     ctx.fillStyle = '#a0a0a0';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -312,6 +313,14 @@ button:hover{
                     ctx.lineTo(canvas.width, i* tamanhoQuadrado, canvas.height);
                     ctx.stroke();
                   }
+
+                  //PASSO 3: Desenhar a cobra 
+                  // forEach: outra forma de percorrer um array
+                  cobra.forEach( (pedaco, indice) =>{
+                    console.log('pedaço da cobra'+indice);
+                  });
+
+                  ctx.fill();
                 }
 
             
