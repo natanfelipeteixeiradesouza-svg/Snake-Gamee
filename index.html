@@ -325,8 +325,7 @@ button:hover{
                     }
 
                     ctx.fillStyle = cor_do_pedaco;
-                    
-                    ctx.fillStyle = '#4CAF50';
+
 
                     ctx.fillRect(
                       pedaco.x *tamanhoQuadrado + 1,
@@ -334,7 +333,13 @@ button:hover{
                       tamanhoQuadrado -2,
                       tamanhoQuadrado -2
                     )
-                   
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                     ctx.fillRect(
+                      pedaco.x *tamanhoQuadrado + 1,
+                      pedaco.y *tamanhoQuadrado +1,
+                      tamanhoQuadrado -2,
+                      tamanhoQuadrado -2
+                    )
                   });
 
                   ctx.fill();
