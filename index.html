@@ -1,712 +1,401 @@
-
 <!DOCTYPE html>
-<html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="pt-br"> 
+ <head>
+  <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <!--
+ <meta viewport>: esta tag é importante para sites que deve funcionar em dispositivos móveis. width-device -
+ -->
+
+ <title>Jogo da Cobrinha</title>
+
+ <style>
+
+body{
+  background: radial-gradient(circle at top, #0f0f1a, #020617);
+  font-family: Arial, sans-serif;
+}
+
+.container{
+  text-align: center;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 40px #00f0ff33;
+  color: #e0f7ff;
+  border: 1px solid #00f0ff55;
+}
+
+.info{
+  font-size: 1em;
+}
+
+.potuacao{
+  font-weight: bold;
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
+}
+
+.recorde{
+  font-weight: bold;
+  color: #ff00c8;
+  text-shadow: 0 0 10px #ff00c8;
+}
+
+#canvas{
+  border: 3px solid #00f0ff;
+  border-radius: 10px;
+  background-color: #01030a;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 
+    0px 0px 20px #00f0ff,
+    inset 0px 0px 20px #00f0ff22;
+}
+
+.controles{
+  margin-top: 20px;
+}
+
+button {
+  font-size: 16px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #00f0ff, #0066ff);
+  color: #001018;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin: 5px;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #00f0ff88;
+}
+
+button:hover{
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #00f0ff;
+}
+
+.teclas{
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  gap: 8px;
+  justify-content: center;
+  margin: 15px auto;
+}
+
+.tecla{
+  width: 50px;
+  height: 50px;
+  background: #020617;
+  color: #00f0ff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #00f0ff55;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00f0ff33;
+}
+
+.tecla:active{
+  background-color: #00f0ff;
+  color: #001018;
+}
+
+.tecla.vazio{
+  background-color: transparent;
+  cursor: default;
+  box-shadow: none;
+  border: none;
+}
+
+.instrucoes{
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 300px; /* controla largura */
+  width: 90%; /* responsivo */
+  background: linear-gradient(45deg, #00f0ff, #ff00c8);
+  border-radius: 12px;
+  font-size: 14px;
+  color: #001018;
+  box-shadow: 0 0 20px #00f0ff55;
+  text-align: left; /* deixa mais organizado */
+}
+
+.instrucoes h3{
+  margin-bottom: 10px;
+  color: #000;
+}
+
+@media (max-width:600px){
+  h1{
+    font-size: 1.8em;
+  }
+  .info{
+    font-size: 1em;
+  }
+}
+
+</style>
+
+ </head>
+
+ <body>
+    
+
+    <div  class="container">
+
+    <h1>&#128013; Jogo da Cobrinha 
+    </h1>  
+
+   <div class="info">
+   <div class="potuacao">
+     Pontuacao: <span id="pontos"> 0 </span>
+   </div>
+
+<div class="recorde">
+  Recorde: <span id="recorde"> 0 </span>
+</div>
+
+   </div>
+  <canvas id="canvas" width="400" height="400">
+  <!--
+    <canvas> é um elemento  especial para desenho 2d ou 3d.Por si só
+    é apenas um retangulo vazio. O Java Script vai usar o "contexto 2d"
+    para desenhar a cobra, e comida, etc.
+
+    nah nah nah nahnahnah hey jude!
+  
+  -->
+
+  </canvas>
+
+       <div  class="controles">
+                
+                <button onclick="iniciarJogo();">Iniciar Jogo</button>
+                <button onclick="pause();">Pausar / Continuar</button>
 
-    <title>Jogo da Cobrinha Neon</title>
-
-    <style>
-
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body{
-            min-height: 100vh;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            background:
-                radial-gradient(circle at top, #0f172a, #020617);
-
-            font-family: Arial, sans-serif;
-        }
-
-        .container{
-            text-align: center;
-
-            background: rgba(15, 23, 42, 0.6);
-
-            backdrop-filter: blur(10px);
-
-            padding: 30px;
-
-            border-radius: 20px;
-
-            border: 1px solid #00f0ff55;
-
-            box-shadow:
-                0 0 40px #00f0ff33;
-
-            color: white;
-        }
-
-        h1{
-            margin-bottom: 20px;
-
-            color: #00f0ff;
-
-            text-shadow: 0 0 15px #00f0ff;
-        }
-
-        .info{
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-
-            margin-bottom: 20px;
-
-            font-size: 18px;
-        }
-
-        .pontuacao{
-            color: #00f0ff;
-            font-weight: bold;
-        }
-
-        .recorde{
-            color: #ff00c8;
-            font-weight: bold;
-        }
-
-        #canvas{
-            background: #020617;
-
-            border: 3px solid #00f0ff;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 0 25px #00f0ff,
-                inset 0 0 20px #00f0ff22;
-        }
-
-        .controles{
-            margin-top: 20px;
-        }
-
-        button{
-            background:
-                linear-gradient(45deg, #00f0ff, #0066ff);
-
-            color: #001018;
-
-            border: none;
-
-            padding: 10px 15px;
-
-            margin: 5px;
-
-            border-radius: 10px;
-
-            cursor: pointer;
-
-            font-size: 16px;
-
-            font-weight: bold;
-
-            transition: 0.3s;
-
-            box-shadow: 0 0 10px #00f0ff88;
-        }
-
-        button:hover{
-            transform: scale(1.1);
-            box-shadow: 0 0 20px #00f0ff;
-        }
-
-        .teclas{
-            display: grid;
-            grid-template-columns: repeat(3, 60px);
-            gap: 8px;
-
-            justify-content: center;
-
-            margin: 20px auto;
-        }
-
-        .tecla{
-            width: 60px;
-            height: 60px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            background: #020617;
-
-            border: 1px solid #00f0ff55;
-
-            border-radius: 10px;
-
-            color: #00f0ff;
-
-            font-size: 24px;
-
-            cursor: pointer;
-
-            user-select: none;
-
-            transition: 0.2s;
-        }
-
-        .tecla:hover{
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #00f0ff55;
-        }
-
-        .tecla:active{
-            background: #00f0ff;
-            color: #001018;
-        }
-
-        .vazio{
-            visibility: hidden;
-        }
-
-        .instrucoes{
-            margin-top: 20px;
-
-            padding: 15px;
-
-            border-radius: 12px;
-
-            background:
-                linear-gradient(45deg, #00f0ff, #ff00c8);
-
-            color: #001018;
-
-            text-align: left;
-
-            max-width: 320px;
-        }
-
-        .instrucoes h3{
-            margin-bottom: 10px;
-        }
-
-        .game-over{
-            margin-top: 15px;
-
-            color: #ff4d4d;
-
-            font-weight: bold;
-
-            font-size: 22px;
-
-            display: none;
-
-            text-shadow: 0 0 10px #ff0000;
-        }
-
-        @media(max-width: 600px){
-
-            #canvas{
-                width: 300px;
-                height: 300px;
-            }
-
-            .teclas{
-                grid-template-columns: repeat(3, 50px);
-            }
-
-            .tecla{
-                width: 50px;
-                height: 50px;
-            }
-        }
-
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <h1>🐍 Jogo da Cobrinha</h1>
-
-        <div class="info">
-
-            <div class="pontuacao">
-                Pontuação: <span id="pontos">0</span>
             </div>
 
-            <div class="recorde">
-                Recorde: <span id="recorde">0</span>
+            <div class="teclas">
+
+                <div class="tecla vazio"></div>
+                <div class="tecla" onclick="mudarDirecao('cima')" >&#9650;</div>
+                <div class="tecla vazio"></div>
+                <div class="tecla" onclick="mudarDirecao('esquerda')" >&#9668;</div>
+                <div class="tecla" onclick="mudarDirecao('baixo')" >&#9660;</div>
+                <div class="tecla" onclick="mudarDirecao('direita')" >&#9658;</div>
+
+            </div>
+
+            <div class="instrucoes">
+                <h3>Como Jogar:</h3>
+                <p>Use as setas de teclado ou os botões acima para controlar a cobra</p>
+                <p>Coma as maçãs vermelhas &#127822; para crescer e ganhar pontos</p>
+                <p>Não bata nas paredes nem no próprio corpo</p>
             </div>
 
         </div>
 
-        <canvas id="canvas" width="400" height="400"></canvas>
-
-        <div class="game-over" id="gameOverTexto">
-            GAME OVER
-        </div>
-
-        <div class="controles">
-
-            <button onclick="iniciarJogo()">
-                Iniciar Jogo
-            </button>
-
-            <button onclick="pausarJogo()">
-                Pausar / Continuar
-            </button>
-
-        </div>
-
-        <div class="teclas">
-
-            <div class="tecla vazio"></div>
-
-            <div class="tecla" onclick="mudarDirecao('cima')">
-                ▲
-            </div>
-
-            <div class="tecla vazio"></div>
-
-            <div class="tecla" onclick="mudarDirecao('esquerda')">
-                ◀
-            </div>
-
-            <div class="tecla" onclick="mudarDirecao('baixo')">
-                ▼
-            </div>
-
-            <div class="tecla" onclick="mudarDirecao('direita')">
-                ▶
-            </div>
-
-        </div>
-
-        <div class="instrucoes">
-
-            <h3>Como Jogar:</h3>
-
-            <p>
-                Use as setas do teclado ou os botões.
-            </p>
-
-            <p>
-                Pegue as maçãs 🍎 para ganhar pontos.
-            </p>
-
-            <p>
-                Não bata na parede nem em você mesmo.
-            </p>
-
-        </div>
-
-    </div>
-
-    <script>
-
-        // =============================
-        // CANVAS
-        // =============================
-
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-
-        // =============================
-        // CONFIGURAÇÕES
-        // =============================
-
-        const tamanhoQuadrado = 20;
-
-        const quantidadeQuadrados =
-            canvas.width / tamanhoQuadrado;
-
-        // =============================
-        // VARIÁVEIS
-        // =============================
-
-        let cobra;
-        let direcao;
-        let proximaDirecao;
-
-        let comida;
-
-        let pontos;
-        let recorde;
-
-        let jogoAtivo;
-        let jogoPausado;
-
-        let intervaloJogo;
-
-        // =============================
-        // RECORDE
-        // =============================
-
-        recorde =
-            localStorage.getItem('recordeCobrinha') || 0;
-
-        document.getElementById('recorde').textContent =
-            recorde;
-
-        // =============================
-        // INICIAR JOGO
-        // =============================
-
-        function iniciarJogo(){
-
-            cobra = [
-                {x: 10, y: 10},
-                {x: 9, y: 10},
-                {x: 8, y: 10}
-            ];
-
-            direcao = 'direita';
-            proximaDirecao = 'direita';
-
-            pontos = 0;
-
-            jogoAtivo = true;
-            jogoPausado = false;
-
-            document.getElementById('pontos').textContent =
-                pontos;
-
-            document.getElementById('gameOverTexto').style.display =
-                'none';
-
-            gerarComida();
-
-            if(intervaloJogo){
-                clearInterval(intervaloJogo);
-            }
-
-            intervaloJogo =
-                setInterval(atualizarJogo, 100);
-
-            desenhar();
-        }
-
-        // =============================
-        // LOOP PRINCIPAL
-        // =============================
-
-        function atualizarJogo(){
-
-            if(!jogoAtivo || jogoPausado){
-                return;
-            }
-
-            direcao = proximaDirecao;
-
-            let cabeca = { ...cobra[0] };
-
-            // MOVIMENTO
-
-            if(direcao === 'direita'){
-                cabeca.x++;
-            }
-
-            if(direcao === 'esquerda'){
-                cabeca.x--;
-            }
-
-            if(direcao === 'cima'){
-                cabeca.y--;
-            }
-
-            if(direcao === 'baixo'){
-                cabeca.y++;
-            }
-
-            // COLISÃO COM PAREDE
-
-            if(
-                cabeca.x < 0 ||
-                cabeca.y < 0 ||
-                cabeca.x >= quantidadeQuadrados ||
-                cabeca.y >= quantidadeQuadrados
-            ){
-                fimDeJogo();
-                return;
-            }
-
-            // COLISÃO COM CORPO
-
-            for(let pedaco of cobra){
-
-                if(
-                    cabeca.x === pedaco.x &&
-                    cabeca.y === pedaco.y
-                ){
-                    fimDeJogo();
-                    return;
-                }
-            }
-
-            // ADICIONAR CABEÇA
-
-            cobra.unshift(cabeca);
-
-            // PEGAR COMIDA
-
-            if(
-                cabeca.x === comida.x &&
-                cabeca.y === comida.y
-            ){
-
-                pontos++;
-
-                document.getElementById('pontos').textContent =
-                    pontos;
-
-                // aumentar velocidade
-
-                if(pontos % 5 === 0){
-
-                    clearInterval(intervaloJogo);
-
-                    intervaloJogo =
-                        setInterval(
-                            atualizarJogo,
-                            Math.max(50, 100 - pontos * 2)
-                        );
-                }
-
-                // recorde
-
-                if(pontos > recorde){
-
-                    recorde = pontos;
-
-                    localStorage.setItem(
-                        'recordeCobrinha',
-                        recorde
-                    );
-
-                    document.getElementById('recorde').textContent =
-                        recorde;
-                }
-
+        <script>
+
+            //=============================
+            // CONFIGURAÇÕES DO JOGO
+            //=============================
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            // tamanho de cada quadrado no jogo
+            const tamanhoQuadrado = 20;
+            // quantos quadrados cabem na largura e altura do espaço 2D
+            const quantidadeQuadrados = canvas.width / tamanhoQuadrado;
+
+            //============================
+            // Variáveis do Jogo
+            //============================
+            let cobra;              // Array (vetor) que guarda as posições da cobra
+            let direcao;            // Direção atual da cobra
+            let proximaDirecao;     // Próxima direção (evita viradas impossíveis)
+            let comida;             // Posição da comida
+            let pontos;             // Pontuação atual
+            let recorde;            // Melhor pontuação
+            let jogoAtivo;          // Se o jogo está rodando
+            let jogoPausado;        // Se o jogo está pausado
+            let intervaloJogo;      // Controla a velocidade do jogo
+
+            //==============================
+            // Carregar recorde do Navegador
+            //==============================
+            recorde = localStorage.getItem('recordeCobrinha') || 0;
+            document.getElementById('recorde').textContent = recorde;
+
+            //==============================
+            // Função para inicar o Jogo
+            //==============================
+            function iniciarJogo(){
+                cobra = [
+                    { x: 10, y: 10},
+                    { x: 9,  y: 10},
+                    { x: 8,  y: 10},
+                ];
+
+                direcao = 'direita';
+                proximaDirecao = 'direita';
+                pontos = 0;
+                jogoAtivo = true;
+                jogoPausado = false;
+
+                document.getElementById ('pontos').textContent = pontos;
+                
                 gerarComida();
 
-            }else{
+            //Limpar o intervalo anterior se existir
 
-                cobra.pop();
-            }
-
-            desenhar();
-        }
-
-        // =============================
-        // DESENHAR
-        // =============================
-
-        function desenhar(){
-
-            // FUNDO
-
-            ctx.fillStyle = '#020617';
-
-            ctx.fillRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-            // GRADE
-
-            ctx.strokeStyle = '#111827';
-            ctx.lineWidth = 0.5;
-
-            for(let i = 0; i <= quantidadeQuadrados; i++){
-
-                // vertical
-
-                ctx.beginPath();
-                ctx.moveTo(i * tamanhoQuadrado, 0);
-                ctx.lineTo(i * tamanhoQuadrado, canvas.height);
-                ctx.stroke();
-
-                // horizontal
-
-                ctx.beginPath();
-                ctx.moveTo(0, i * tamanhoQuadrado);
-                ctx.lineTo(canvas.width, i * tamanhoQuadrado);
-                ctx.stroke();
-            }
-
-            // COBRA
-
-            cobra.forEach((pedaco, indice) => {
-
-                let cor = '#4CAF50';
-
-                if(indice === 0){
-                    cor = '#00ff88';
+                if(intervaloJogo){
+                    clearInterval(intervaloJogo);
                 }
 
-                ctx.fillStyle = cor;
 
-                ctx.fillRect(
-                    pedaco.x * tamanhoQuadrado + 1,
-                    pedaco.y * tamanhoQuadrado + 1,
-                    tamanhoQuadrado - 2,
-                    tamanhoQuadrado - 2
-                );
+            //======================================================
+            //Executa a função atualizarJogo a cada 100 milisegundos
+            //======================================================
 
-                // brilho
 
-                ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                intervaloJogo = setInterval(atualizarJogo, 100);
 
-                ctx.fillRect(
-                    pedaco.x * tamanhoQuadrado + 3,
-                    pedaco.y * tamanhoQuadrado + 3,
-                    tamanhoQuadrado / 2,
-                    tamanhoQuadrado / 2
-                );
-            });
+            }
+            
+            //===============================
+            //FUNÇÃO PRINCIPAL DO JOGO (LOOP)
+            //===============================
 
-            // COMIDA
-
-            ctx.fillStyle = '#ff0033';
-
-            ctx.beginPath();
-
-            ctx.arc(
-                comida.x * tamanhoQuadrado + tamanhoQuadrado / 2,
-                comida.y * tamanhoQuadrado + tamanhoQuadrado / 2,
-                tamanhoQuadrado / 2 - 2,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-        }
-
-        // =============================
-        // GERAR COMIDA
-        // =============================
-
-        function gerarComida(){
-
-            let posicaoValida = false;
-
-            while(!posicaoValida){
-
-                comida = {
-                    x: Math.floor(Math.random() * quantidadeQuadrados),
-                    y: Math.floor(Math.random() * quantidadeQuadrados)
-                };
-
-                posicaoValida = true;
-
-                for(let pedaco of cobra){
-
-                    if(
-                        comida.x === pedaco.x &&
-                        comida.y === pedaco.y
-                    ){
-                        posicaoValida = false;
-                        break;
+                function atualizarJogo(){
+                    if(!jogoAtivo || jogoPausado){
+                        return;
                     }
+
+                    direcao = proximaDirecao;
+
+                    let cabeca = {...cobra[0]}
+
+                
+
+                        //mover a cabeça na direção atual
+                    desenhar();
                 }
-            }
-        }
 
-        // =============================
-        // DIREÇÃO
-        // =============================
+                function desenhar(){
+                  //PASSO 1
+                 //limpar o fundo do canvas
+                    ctx.fillStyle = '#a0a0a0';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        function mudarDirecao(novaDirecao){
+                    //PASSO 2
+                    //Desenhar a grade (linhas de referência)
+              
+                    ctx.strokeStyle = '#e0e0e';
+                    ctx.lineWidth = 0.5;
 
-            if(
-                novaDirecao === 'cima' &&
-                direcao !== 'baixo'
-            ){
+                  for(let i = 0; i <= quantidadeQuadrados; i++){
+                    //Linha vertical
+                    ctx.beginPath();
+                    ctx.moveTo(i* tamanhoQuadrado, 0);
+                    ctx.lineTo(i* tamanhoQuadrado, canvas.height);
+                    ctx.stroke();
+
+                    //Linha horizontal
+                     ctx.beginPath();
+                    ctx.moveTo(0, i* tamanhoQuadrado);
+                    ctx.lineTo(canvas.width, i* tamanhoQuadrado, canvas.height);
+                    ctx.stroke();
+                  }
+
+                  //PASSO 3: Desenhar a cobra 
+                  // forEach: outra forma de percorrer um array
+
+                  cobra.forEach( (pedaco, indice) =>{
+
+                    let cor_do_pedaco = '#4CAF50';
+                    if(indice === 0){
+                      cor_do_pedaco = '#2d5016';
+                    }
+
+                    ctx.fillStyle = cor_do_pedaco;
+
+
+                    ctx.fillRect(
+                      pedaco.x *tamanhoQuadrado + 1,
+                      pedaco.y *tamanhoQuadrado +1,
+                      tamanhoQuadrado -2,
+                      tamanhoQuadrado -2
+                    )
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                     ctx.fillRect(
+                      pedaco.x *tamanhoQuadrado + 2,
+                      pedaco.y *tamanhoQuadrado +2,
+                      tamanhoQuadrado /2,
+                      tamanhoQuadrado /2
+                    )
+                  });
+
+                  //PASSO 4 - Desenhar a comida(círculo vermelho)
+
+                  ctx.fillStyle = '#dc3545';
+                  ctx.beginPath();
+                  ctx.arc(
+                    comida.x *tamanhoQuadrado + tamanhoQuadrado / 2,
+                    comida.y *tamanhoQuadrado + tamanhoQuadrado / 2,
+                    tamanhoQuadrado / 2 - 2,
+                    0,
+                    Math.PI * 2
+                  );
+
+                  ctx.fill();
+                }
+
+            
+
+            //==============================
+            //Função para gerar comida
+            //==============================
+               
+
+
+                 function gerarComida(){
+                    let posicaovalida = false
+                    while(!posicaovalida){
+                        comida = {
+                            x : Math.floor(Math.random() * quantidadeQuadrados),
+                            y : Math.floor(Math.random() * quantidadeQuadrados)
+                        }
+
+                        //verificar se a comida não está em cima da cobra
+                        posicaovalida = true;
+
+                        for(let pedaco of cobra){
+
+                            if(comida.x === pedaco.x && comida.y === pedaco.y){
+                                posicaovalida = false;
+                                break;
+                            }
+                        }
+                     }
+                  }
+
+            function mudarDirecao(novaDirecao){
+                //bem aqui vai aparecer um bug
                 proximaDirecao = novaDirecao;
             }
-
-            if(
-                novaDirecao === 'baixo' &&
-                direcao !== 'cima'
-            ){
-                proximaDirecao = novaDirecao;
+            
+            function pausarJogo(){
+                console.log('Pausa no Jogo!!')
             }
 
-            if(
-                novaDirecao === 'esquerda' &&
-                direcao !== 'direita'
-            ){
-                proximaDirecao = novaDirecao;
-            }
+        </script>
 
-            if(
-                novaDirecao === 'direita' &&
-                direcao !== 'esquerda'
-            ){
-                proximaDirecao = novaDirecao;
-            }
-        }
-
-        // =============================
-        // PAUSAR
-        // =============================
-
-        function pausarJogo(){
-
-            jogoPausado = !jogoPausado;
-        }
-
-        // =============================
-        // GAME OVER
-        // =============================
-
-        function fimDeJogo(){
-
-            jogoAtivo = false;
-
-            clearInterval(intervaloJogo);
-
-            document.getElementById('gameOverTexto').style.display =
-                'block';
-        }
-
-        // =============================
-        // CONTROLE TECLADO
-        // =============================
-
-        document.addEventListener('keydown', (evento) => {
-
-            if(evento.key === 'ArrowUp'){
-                mudarDirecao('cima');
-            }
-
-            if(evento.key === 'ArrowDown'){
-                mudarDirecao('baixo');
-            }
-
-            if(evento.key === 'ArrowLeft'){
-                mudarDirecao('esquerda');
-            }
-
-            if(evento.key === 'ArrowRight'){
-                mudarDirecao('direita');
-            }
-
-            // reiniciar rápido
-
-            if(evento.key.toLowerCase() === 'r'){
-                iniciarJogo();
-            }
-        });
-
-    </script>
-
-</body>
+    </body>
 </html>
-```
