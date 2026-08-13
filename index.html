@@ -288,25 +288,25 @@ button:hover{
 
                         switch(direcao){
                           case'cima':
-                          cabeca y--;
+                          cabeca.y--;
                           break;
 
                            case'baixo':
-                          cabeca y++;
+                          cabeca.y++;
                           break;
 
                            case'esquerda':
-                          cabeca x--;
+                          cabeca.x--;
                           break;
 
                            case'direita':
-                          cabeca x++;
+                          cabeca.x++;
                           break;
                         }
 
                         cobra.unshift(cabeca);
 
-                        cobra.pop()
+                        cobra.pop();g
                     desenhar();
                 }
 
