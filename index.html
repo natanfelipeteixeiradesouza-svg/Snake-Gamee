@@ -329,6 +329,14 @@ button:hover{
                function fimDeJogo(){
                 alert("GAME OVER!!")
                 clearInterval(intervaloJogo);
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAling = 'center';
+                ctx.fillText('FIM DE JOGO', canvas.width / 2, canvas.height / 2);
                }
 
 
