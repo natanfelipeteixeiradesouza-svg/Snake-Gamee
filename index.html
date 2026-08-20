@@ -269,47 +269,63 @@ button:hover{
 
             }
             
-            //===============================
-            //FUNÇÃO PRINCIPAL DO JOGO (LOOP)
-            //===============================
+              //===================================
+            // FUNÇÃO PRINCIPAL DO JOGO ( LOOP )
+            //===================================
+            function atualizarJogo(){
+               if(!jogoAtivo || jogoPausado){
+                    return;
+               }
 
-                function atualizarJogo(){
-                    if(!jogoAtivo || jogoPausado){
-                        return;
-                    }
+               direcao = proximaDirecao;
+                
+               let cabeca = {...cobra[0]} 
 
-                    direcao = proximaDirecao;
+               //Mover a cabeça na direção atual
+               switch(direcao){
+                    case 'cima':
+                        cabeca.y--;
+                        break;
+                    
+                    case 'baixo':
+                        cabeca.y++;
+                        break;
 
-                    let cabeca = {...cobra[0]}
+                    case 'esquerda':
+                        cabeca.x--;
+                        break;
 
-                     
+                    case 'direita':
+                        cabeca.x++;
+                        break;
+               }
 
-                        //mover a cabeça na direção atual
+                // verificar colisão com paredes (esquerda ou direita)
+                if(cabeca.x < 0 || cabeca.x >= quantidadeQuadrados){
+                   fimDeJogo();
+                   return;
 
-                        switch(direcao){
-                          case'cima':
-                          cabeca.y--;
-                          break;
+               }
 
-                           case'baixo':
-                          cabeca.y++;
-                          break;
 
-                           case'esquerda':
-                          cabeca.x--;
-                          break;
+               // adiciona nova cabeça
+               cobra.unshift(cabeca);
 
-                           case'direita':
-                          cabeca.x++;
-                          break;
-                        }
+               //remover o último elemento do vetor
+               cobra.pop();
+               
+               desenhar();                
+            }
 
-                        cobra.unshift(cabeca);
+               //FIM DE JOGO
 
-                        cobra.pop();
-                    desenhar();
-                }
+               function fimDeJogo(){
+                alert("Perdeu fiote!!")
+                clearInterval(intervaloJogo);
+               }
 
+
+                 
                 function desenhar(){
                   //PASSO 1
                  //limpar o fundo do canvas
