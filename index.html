@@ -306,7 +306,11 @@ button:hover{
                    return;
 
                }
-
+              if(cabeça.y > 0 || cabeca.y >= quantidadeQuadrados){
+                 fimDeJogo();
+                 return;
+              
+              }
 
                // adiciona nova cabeça
                cobra.unshift(cabeca);
