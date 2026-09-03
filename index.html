@@ -465,7 +465,14 @@ button:hover{
             }
             
             function pausarJogo(){
-                console.log('Pausa no Jogo!!')
+
+                pausarJogo = !pausarJogo;
+
+                if(pausarJogo === true){
+                  clearInterval(intervaloJogo);
+                }else{
+                  intervaloJogo = setInterval(atualizarJogo, 500);
+                }
             }
                //=======================//
               //  CONTROLE DE TECLADO  //
