@@ -472,8 +472,17 @@ button:hover{
                 
                 jogoPausado = !jogoPausado;
 
-                if(pausarJogo === true){
+                if(jogoPausado){
                   clearInterval(intervaloJogo);
+
+                  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('JOGO PAUSADO', canvas.width / 2, canvas.height / 2);
+
                 }else{
                   intervaloJogo = setInterval(atualizarJogo, 500);
                 }
