@@ -473,7 +473,7 @@ button:hover{
                 jogoPausado = !jogoPausado;
 
                 if(jogoPausado){
-                  clearInterval(intervaloJogo);
+                  clearInterval(jogoPausado);
 
                   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
