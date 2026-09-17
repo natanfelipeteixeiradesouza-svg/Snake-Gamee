@@ -319,6 +319,10 @@ button:hover{
                cobra.unshift(cabeca);
 
                if(cabeca.x === comida.x && cabeca.y === comida.y){
+                pontos = pontos +1;
+
+                atualizarPainelPontos();  
+                gerarComida();    
 
                }else{
                 cobra.pop();
@@ -329,7 +333,21 @@ button:hover{
                
                desenhar();                
             }
+                 //======================================================//
+                 //ATUALIZA OS VALORES DO PAINEL DE PONTUAÇÃO + RECORDE //
+                //=====================================================//
 
+
+               function atualizarPainelPontos(){
+                 document.getElementById('pontos').textContent = pontos;  
+               }
+
+              function atualizarRecordePontuacao(){
+                if(pontos > recorde){
+                  document.getElementById('recorde').textContent = pontos;  
+                  localStorage.setItem('recordeCobrinha', pontos);
+                }
+              }
                //FIM DE JOGO
 
                function fimDeJogo(){
