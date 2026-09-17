@@ -318,8 +318,14 @@ button:hover{
                // adiciona nova cabeça
                cobra.unshift(cabeca);
 
+               if(cabeca.x === comida.x && cabeca.y === comida.y){
+
+               }else{
+                cobra.pop();
+               }
+
                //remover o último elemento do vetor
-               //cobra.pop();
+               cobra.pop();
                
                desenhar();                
             }
