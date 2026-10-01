@@ -1,549 +1,578 @@
 <!DOCTYPE html>
-
-<html lang="pt-br"> 
- <head>
-  <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
- <!--
- <meta viewport>: esta tag é importante para sites que deve funcionar em dispositivos móveis. width-device -
- -->
-
- <title>Jogo da Cobrinha</title>
-
- <style>
-
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo da Cobrinha</title>
+<style>
+*{box-sizing:border-box}
 body{
-  background: radial-gradient(circle at top, #0f0f1a, #020617);
-  font-family: Arial, sans-serif;
+  margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at top,#0f0f1a,#020617);
+  font-family:Arial,sans-serif;padding:16px;
 }
-
 .container{
-  text-align: center;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0px 0px 40px #00f0ff33;
-  color: #e0f7ff;
-  border: 1px solid #00f0ff55;
+  text-align:center;background:rgba(15,23,42,.6);backdrop-filter:blur(10px);
+  padding:24px;border-radius:20px;box-shadow:0 0 40px #00f0ff33;
+  color:#e0f7ff;border:1px solid #00f0ff55;width:100%;max-width:470px;
 }
-
-.info{
-  font-size: 1em;
-}
-
-.potuacao{
-  font-weight: bold;
-  color: #00f0ff;
-  text-shadow: 0 0 10px #00f0ff;
-}
-
-.recorde{
-  font-weight: bold;
-  color: #ff00c8;
-  text-shadow: 0 0 10px #ff00c8;
-}
-
+h1{margin:0 0 12px;font-size:1.8em}
+.info{display:flex;justify-content:space-between;gap:8px;font-weight:bold;font-size:.95em}
+.info div{flex:1}
+.pontuacao{color:#00f0ff;text-shadow:0 0 10px #00f0ff}
+.nivel{color:#ffd400;text-shadow:0 0 10px #ffd400}
+.recorde{color:#ff00c8;text-shadow:0 0 10px #ff00c8}
+.combo{height:20px;margin-top:6px;color:#ffd400;font-weight:bold;font-size:.9em}
 #canvas{
-  border: 3px solid #00f0ff;
-  border-radius: 10px;
-  background-color: #01030a;
-  display: block;
-  margin: 20px auto;
-  box-shadow: 
-    0px 0px 20px #00f0ff,
-    inset 0px 0px 20px #00f0ff22;
+  border:3px solid #00f0ff;border-radius:10px;background:#01030a;display:block;
+  margin:8px auto 12px;width:100%;max-width:400px;height:auto;touch-action:none;
+  box-shadow:0 0 20px #00f0ff,inset 0 0 20px #00f0ff22;
 }
-
-.controles{
-  margin-top: 20px;
+.dificuldade{display:flex;justify-content:center;gap:6px;margin-bottom:6px}
+button{
+  font-size:15px;cursor:pointer;background:linear-gradient(45deg,#00f0ff,#0066ff);
+  color:#001018;border:none;padding:10px 14px;border-radius:10px;margin:4px;
+  font-weight:bold;transition:.2s;box-shadow:0 0 10px #00f0ff88;
 }
-
-button {
-  font-size: 16px;
-  cursor: pointer;
-  background: linear-gradient(45deg, #00f0ff, #0066ff);
-  color: #001018;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
-  margin: 5px;
-  transition: 0.3s;
-  box-shadow: 0 0 10px #00f0ff88;
-}
-
-button:hover{
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #00f0ff;
-}
-
-.teclas{
-  display: grid;
-  grid-template-columns: repeat(3, 50px);
-  gap: 8px;
-  justify-content: center;
-  margin: 15px auto;
-}
-
+button:hover:not(:disabled){transform:scale(1.07);box-shadow:0 0 20px #00f0ff}
+button:focus-visible,.tecla:focus-visible{outline:3px solid #ffd400;outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.dif{background:#020617;color:#00f0ff;border:1px solid #00f0ff55;box-shadow:none;padding:8px 12px}
+.dif.ativo{background:linear-gradient(45deg,#ff00c8,#7a00ff);color:#fff;border-color:transparent;box-shadow:0 0 14px #ff00c8aa}
+.teclas{display:grid;grid-template-columns:repeat(3,56px);gap:8px;justify-content:center;margin:12px auto}
 .tecla{
-  width: 50px;
-  height: 50px;
-  background: #020617;
-  color: #00f0ff;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid #00f0ff55;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  box-shadow: 0 0 10px #00f0ff33;
+  width:56px;height:56px;background:#020617;color:#00f0ff;border-radius:8px;cursor:pointer;
+  border:1px solid #00f0ff55;font-size:20px;display:flex;align-items:center;justify-content:center;
+  font-weight:bold;box-shadow:0 0 10px #00f0ff33;user-select:none;touch-action:manipulation;
 }
-
-.tecla:active{
-  background-color: #00f0ff;
-  color: #001018;
-}
-
-.tecla.vazio{
-  background-color: transparent;
-  cursor: default;
-  box-shadow: none;
-  border: none;
-}
-
+.tecla:active{background:#00f0ff;color:#001018}
+.tecla.vazio{background:transparent;cursor:default;box-shadow:none;border:none}
 .instrucoes{
-  margin: 20px auto;
-  padding: 15px;
-  max-width: 300px; /* controla largura */
-  width: 90%; /* responsivo */
-  background: linear-gradient(45deg, #00f0ff, #ff00c8);
-  border-radius: 12px;
-  font-size: 14px;
-  color: #001018;
-  box-shadow: 0 0 20px #00f0ff55;
-  text-align: left; /* deixa mais organizado */
+  margin:16px auto 0;padding:14px;max-width:340px;background:linear-gradient(45deg,#00f0ff,#ff00c8);
+  border-radius:12px;font-size:13px;color:#001018;box-shadow:0 0 20px #00f0ff55;text-align:left;
 }
-
-.instrucoes h3{
-  margin-bottom: 10px;
-  color: #000;
-}
-
-@media (max-width:600px){
-  h1{
-    font-size: 1.8em;
-  }
-  .info{
-    font-size: 1em;
-  }
-}
-
+.instrucoes h3{margin:0 0 8px;color:#000}
+.instrucoes p{margin:5px 0}
+@media (max-width:600px){h1{font-size:1.5em}.container{padding:16px}}
+@media (prefers-reduced-motion:reduce){button{transition:none}}
 </style>
+</head>
+<body>
+<div class="container">
+  <h1>&#128013; Jogo da Cobrinha</h1>
 
- </head>
+  <div class="info">
+    <div class="pontuacao">Pontos<br><span id="pontos">0</span></div>
+    <div class="nivel">Nível<br><span id="nivel">1</span></div>
+    <div class="recorde">Recorde<br><span id="recorde">0</span></div>
+  </div>
+  <div class="combo" id="combo"></div>
 
- <body>
-    
+  <div class="dificuldade" role="group" aria-label="Dificuldade">
+    <button class="dif" data-dif="facil">Fácil</button>
+    <button class="dif ativo" data-dif="medio">Médio</button>
+    <button class="dif" data-dif="dificil">Difícil</button>
+  </div>
 
-    <div  class="container">
+  <canvas id="canvas" width="400" height="400"></canvas>
 
-    <h1>&#128013; Jogo da Cobrinha 
-    </h1>  
+  <div>
+    <button id="btnIniciar">Iniciar Jogo</button>
+    <button id="btnPausar">Pausar</button>
+    <button id="btnSom">Som: ligado</button>
+  </div>
 
-   <div class="info">
-   <div class="potuacao">
-     Pontuacao: <span id="pontos"> 0 </span>
-   </div>
+  <div class="teclas">
+    <div class="tecla vazio"></div>
+    <div class="tecla" data-dir="cima" role="button" aria-label="Cima">&#9650;</div>
+    <div class="tecla vazio"></div>
+    <div class="tecla" data-dir="esquerda" role="button" aria-label="Esquerda">&#9668;</div>
+    <div class="tecla" data-dir="baixo" role="button" aria-label="Baixo">&#9660;</div>
+    <div class="tecla" data-dir="direita" role="button" aria-label="Direita">&#9658;</div>
+  </div>
 
-<div class="recorde">
-  Recorde: <span id="recorde"> 0 </span>
+  <div class="instrucoes">
+    <h3>Como jogar</h3>
+    <p>Setas ou WASD movem a cobra. Espaço pausa, Enter inicia. No celular, deslize na tela.</p>
+    <p>&#127822; Maçã: +1 ponto. &#11088; Estrela dourada: vale 5x, mas some em 6 segundos.</p>
+    <p>Comer em sequência (menos de 4s entre uma e outra) acumula combo até x5.</p>
+    <p>A cada 5 comidas o nível sobe e o jogo acelera.</p>
+    <p><b>Fácil:</b> atravessa paredes. <b>Médio:</b> paredes mortais, pontos x2. <b>Difícil:</b> obstáculos surgem a cada nível, pontos x3.</p>
+  </div>
 </div>
 
-   </div>
-  <canvas id="canvas" width="400" height="400">
-  <!--
-    <canvas> é um elemento  especial para desenho 2d ou 3d.Por si só
-    é apenas um retangulo vazio. O Java Script vai usar o "contexto 2d"
-    para desenhar a cobra, e comida, etc.
-
-    nah nah nah nahnahnah hey jude!
-  
-  -->
-
-  </canvas>
-
-       <div  class="controles">
-                
-                <button onclick="iniciarJogo();">Iniciar Jogo</button>
-                <button onclick="pausarJogo();">Pausar / Continuar</button>
-
-            </div>
-
-            <div class="teclas">
-
-                <div class="tecla vazio"></div>
-                <div class="tecla" onclick="mudarDirecao('cima')" >&#9650;</div>
-                <div class="tecla vazio"></div>
-                <div class="tecla" onclick="mudarDirecao('esquerda')" >&#9668;</div>
-                <div class="tecla" onclick="mudarDirecao('baixo')" >&#9660;</div>
-                <div class="tecla" onclick="mudarDirecao('direita')" >&#9658;</div>
-
-            </div>
-
-            <div class="instrucoes">
-                <h3>Como Jogar:</h3>
-                <p>Use as setas de teclado ou os botões acima para controlar a cobra</p>
-                <p>Coma as maçãs vermelhas &#127822; para crescer e ganhar pontos</p>
-                <p>Não bata nas paredes nem no próprio corpo</p>
-            </div>
-
-        </div>
-
-        <script>
-
-            //=============================
-            // CONFIGURAÇÕES DO JOGO
-            //=============================
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            // tamanho de cada quadrado no jogo
-            const tamanhoQuadrado = 20;
-            // quantos quadrados cabem na largura e altura do espaço 2D
-            const quantidadeQuadrados = canvas.width / tamanhoQuadrado;
-
-            //============================
-            // Variáveis do Jogo
-            //============================
-            let cobra;              // Array (vetor) que guarda as posições da cobra
-            let direcao;            // Direção atual da cobra
-            let proximaDirecao;     // Próxima direção (evita viradas impossíveis)
-            let comida;             // Posição da comida
-            let pontos;             // Pontuação atual
-            let recorde;            // Melhor pontuação
-            let jogoAtivo;          // Se o jogo está rodando
-            let jogoPausado;        // Se o jogo está pausado
-            let intervaloJogo;      // Controla a velocidade do jogo
-
-            //==============================
-            // Carregar recorde do Navegador
-            //==============================
-            recorde = localStorage.getItem('recordeCobrinha') || 0;
-            document.getElementById('recorde').textContent = recorde;
-
-            //==============================
-            // Função para inicar o Jogo
-            //==============================
-            function iniciarJogo(){
-                cobra = [
-                    { x: 10, y: 10},
-                    { x: 9,  y: 10},
-                    { x: 8,  y: 10},
-                ];
-
-                direcao = 'direita';
-                proximaDirecao = 'direita';
-                pontos = 0;
-                jogoAtivo = true;
-                jogoPausado = false;
-
-                document.getElementById('pontos').textContent = pontos;
-                
-                gerarComida();
-
-            //Limpar o intervalo anterior se existir
-
-                if(intervaloJogo){
-                    clearInterval(intervaloJogo);
-                }
-
-
-            //======================================================
-            //Executa a função atualizarJogo a cada 100 milisegundos
-            //======================================================
-
-
-                intervaloJogo = setInterval(atualizarJogo, 100);
-
-            }
-            
-              //===================================
-            // FUNÇÃO PRINCIPAL DO JOGO ( LOOP )
-            //===================================
-            function atualizarJogo(){
-               if(!jogoAtivo || jogoPausado){
-                    return;
-               }
-
-               direcao = proximaDirecao;
-                
-               let cabeca = {...cobra[0]} 
-
-               //Mover a cabeça na direção atual
-               switch(direcao){
-                    case 'cima':
-                        cabeca.y--;
-                        break;
-                    
-                    case 'baixo':
-                        cabeca.y++;
-                        break;
-
-                    case 'esquerda':
-                        cabeca.x--;
-                        break;
-
-                    case 'direita':
-                        cabeca.x++;
-                        break;
-               }
-             
-                // verificar colisão com paredes (esquerda ou direita)
-                if(cabeca.x < 0 || cabeca.x >= quantidadeQuadrados){
-                   fimDeJogo();
-                   return;
-
-               }
-                // verificar colisão com o próprio corpo
-                 for(let i = 0; i< cobra.length; i++){
-                  let pedacoCorpo = cobra[i];
-                  if(cabeca.x === pedacoCorpo.x && cabeca.y === pedacoCorpo.y){
-                    fimDeJogo();
-                    return;
-                  }
-                 }
-
-               if(cabeca.y < 0 || cabeca.y >= quantidadeQuadrados){
-                   fimDeJogo();
-                   return;
-
-               }
-
-
-
-               // adiciona nova cabeça
-               cobra.unshift(cabeca);
-
-               if(cabeca.x === comida.x && cabeca.y === comida.y){
-                pontos = pontos +1;
-
-                atualizarPainelPontos();  
-                gerarComida();    
-
-               }else{
-                cobra.pop();
-               }
-
-               //remover o último elemento do vetor
-              
-               
-               desenhar();                
-            }
-                 //======================================================//
-                 //ATUALIZA OS VALORES DO PAINEL DE PONTUAÇÃO + RECORDE //
-                //=====================================================//
-
-
-               function atualizarPainelPontos(){
-                 document.getElementById('pontos').textContent = pontos;  
-                 atualizarRecordePontuacao();
-               }
-
-              function atualizarRecordePontuacao(){
-                if(pontos > recorde){
-                  document.getElementById('recorde').textContent = pontos;  
-                  localStorage.setItem('recordeCobrinha', pontos);
-                }
-              }
-               //FIM DE JOGO
-
-               function fimDeJogo(){
-
-                jogoAtivo = false;
-                
-                clearInterval(intervaloJogo);
-
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 40px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('FIM DE JOGO', canvas.width / 2, canvas.height / 2);
-
-                ctx.font = '20px Arial';
-                ctx.fillText(`Pontuação: ${pontos}`, canvas.width / 2, (canvas.height / 2 + 50));
-               }
-
-
-                 
-                function desenhar(){
-                  //PASSO 1
-                 //limpar o fundo do canvas
-                    ctx.fillStyle = '#020617';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    //PASSO 2
-                    //Desenhar a grade (linhas de referência)
-              
-                    ctx.strokeStyle = '#e0e0e';
-                    ctx.lineWidth = 0.5;
-
-                  for(let i = 0; i <= quantidadeQuadrados; i++){
-                    //Linha vertical
-                    ctx.beginPath();
-                    ctx.moveTo(i* tamanhoQuadrado, 0);
-                    ctx.lineTo(i* tamanhoQuadrado, canvas.height);
-                    ctx.stroke();
-
-                    //Linha horizontal
-                     ctx.beginPath();
-                    ctx.moveTo(0, i* tamanhoQuadrado);
-                    ctx.lineTo(canvas.width, i* tamanhoQuadrado, canvas.height);
-                    ctx.stroke();
-                  }
-
-                  //PASSO 3: Desenhar a cobra 
-                  // forEach: outra forma de percorrer um array
-
-                  cobra.forEach( (pedaco, indice) =>{
-
-                    let cor_do_pedaco = '#4CAF50';
-                    if(indice === 0){
-                      cor_do_pedaco = '#2d5016';
-                    }
-
-                    ctx.fillStyle = cor_do_pedaco;
-
-
-                    ctx.fillRect(
-                      pedaco.x *tamanhoQuadrado + 1,
-                      pedaco.y *tamanhoQuadrado +1,
-                      tamanhoQuadrado -2,
-                      tamanhoQuadrado -2
-                    )
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                     ctx.fillRect(
-                      pedaco.x *tamanhoQuadrado + 2,
-                      pedaco.y *tamanhoQuadrado +2,
-                      tamanhoQuadrado /2,
-                      tamanhoQuadrado /2
-                    )
-                  });
-
-                  //PASSO 4 - Desenhar a comida(círculo vermelho)
-
-                  ctx.fillStyle = '#dc3545';
-                  ctx.beginPath();
-                  ctx.arc(
-                    comida.x *tamanhoQuadrado + tamanhoQuadrado / 2,
-                    comida.y *tamanhoQuadrado + tamanhoQuadrado / 2,
-                    tamanhoQuadrado / 2 - 2,
-                    0,
-                    Math.PI * 2
-                  );
-
-                  ctx.fill();
-                }
-
-            
-
-            //==============================
-            //Função para gerar comida
-            //==============================
-               
-
-
-                 function gerarComida(){
-                    let posicaovalida = false
-                    while(!posicaovalida){
-                        comida = {
-                            x : Math.floor(Math.random() * quantidadeQuadrados),
-                            y : Math.floor(Math.random() * quantidadeQuadrados)
-                        }
-
-                        //verificar se a comida não está em cima da cobra
-                        posicaovalida = true;
-
-                        for(let pedaco of cobra){
-
-                            if(comida.x === pedaco.x && comida.y === pedaco.y){
-                                posicaovalida = false;
-                                break;
-                            }
-                        }
-                     }
-                  }
-
-            function mudarDirecao(novaDirecao){
-
-              if(novaDirecao === 'cima' && direcao !=='baixo'){
-                proximaDirecao = 'cima';
-              }else
-
-               if(novaDirecao === 'baixo' && direcao !=='cima'){
-                proximaDirecao = 'baixo';
-               
-              }else
-
-               if(novaDirecao === 'esquerda' && direcao !=='direita'){
-                proximaDirecao = 'esquerda';
-              }else
-
-               if(novaDirecao === 'direita' && direcao !=='esquerda'){
-                proximaDirecao = 'direita';
-              }
-            }
-            
-            function pausarJogo(){
-
-                if(!jogoAtivo){
-                  return;
-                }
-                
-                jogoPausado = !jogoPausado;
-
-                if(jogoPausado){
-                  clearInterval(jogoPausado);
-
-                  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 40px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('JOGO PAUSADO', canvas.width / 2, canvas.height / 2);
-
-                }else{
-                  intervaloJogo = setInterval(atualizarJogo, 100);
-                }
-            }
-               //=======================//
-              //  CONTROLE DE TECLADO  //
-             //=======================//
-
-            document.addEventListener('keydown', function(event){
-              if(event.key === 'ArrowDown'){
-                 event.preventDefault();
-                 mudarDirecao('baixo');
-              }else if(event.key === 'ArrowUp'){
-                event.preventDefault();
-                mudarDirecao('cima');
-              }else if(event.key === 'ArrowLeft'){
-                event.preventDefault();
-                mudarDirecao('esquerda');
-              }else if(event.key === 'ArrowRight'){
-                event.preventDefault();
-                mudarDirecao('direita');
-              }else if(event.key === ' '){
-                event.preventDefault();
-                pausarJogo();
-              }
-                })
-
-        </script>
-
-    </body>
+<script>
+//=============================
+// CONFIGURAÇÕES
+//=============================
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const T = 20;                       // tamanho do quadrado
+const N = canvas.width / T;         // quadrados por lado
+
+const DIF = {
+  facil:   { nome:'Fácil',   vel:140, min:80, mult:1, atravessa:true,  obstaculos:false },
+  medio:   { nome:'Médio',   vel:110, min:60, mult:2, atravessa:false, obstaculos:false },
+  dificil: { nome:'Difícil', vel:90,  min:45, mult:3, atravessa:false, obstaculos:true  }
+};
+const V = { cima:{x:0,y:-1}, baixo:{x:0,y:1}, esquerda:{x:-1,y:0}, direita:{x:1,y:0} };
+const OPOSTA = { cima:'baixo', baixo:'cima', esquerda:'direita', direita:'esquerda' };
+
+//=============================
+// ESTADO
+//=============================
+let estado = 'parado';              // parado | jogando | pausado | fim | vitoria
+let dificuldade = 'medio';
+let cobra, dir, fila, comida, bonus, obst, particulas, textos;
+let pontos = 0, comidas = 0, nivel = 1, combo = 1, ultimaComida = 0;
+let novoRecorde = false, tremer = 0, acumulador = 0, ultimoTempo = 0;
+let somLigado = true, audioCtx = null;
+
+// recordes separados por dificuldade
+let recordes = { facil:0, medio:0, dificil:0 };
+try { Object.assign(recordes, JSON.parse(localStorage.getItem('recordesCobrinha') || '{}')); } catch(e){}
+
+const $ = id => document.getElementById(id);
+
+//=============================
+// SOM (Web Audio, sem arquivos)
+//=============================
+function tom(freq, dur, tipo='square', vol=0.05, atraso=0){
+  if(!somLigado) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    const t0 = audioCtx.currentTime + atraso;
+    o.type = tipo; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t0); o.stop(t0 + dur);
+  }catch(e){}
+}
+const somComer  = () => { tom(520,.08); tom(780,.1,'square',.05,.07); };
+const somBonus  = () => [660,880,1100].forEach((f,i)=>tom(f,.1,'triangle',.07,i*.07));
+const somNivel  = () => [523,659,784,1046].forEach((f,i)=>tom(f,.12,'triangle',.07,i*.09));
+const somMorrer = () => { tom(200,.25,'sawtooth',.07); tom(120,.4,'sawtooth',.07,.15); };
+
+//=============================
+// INÍCIO / REINÍCIO
+//=============================
+function iniciarJogo(){
+  cobra = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  dir = 'direita'; fila = [];
+  pontos = 0; comidas = 0; nivel = 1; combo = 1; ultimaComida = 0;
+  obst = []; bonus = null; particulas = []; textos = [];
+  novoRecorde = false; tremer = 0; acumulador = 0;
+  comida = null;
+  comida = celulaLivre();
+  estado = 'jogando';
+  atualizarHUD();
+  atualizarBotoes();
+}
+
+function velocidadeAtual(){
+  const d = DIF[dificuldade];
+  return Math.max(d.min, d.vel - (nivel - 1) * 8);
+}
+
+//=============================
+// CÉLULAS LIVRES (sem loop infinito)
+//=============================
+function ocupada(x, y){
+  return cobra.some(p=>p.x===x&&p.y===y) ||
+         obst.some(p=>p.x===x&&p.y===y) ||
+         (comida && comida.x===x && comida.y===y) ||
+         (bonus && bonus.x===x && bonus.y===y);
+}
+function celulaLivre(longeDaCabeca=0){
+  const livres = [];
+  const c = cobra[0];
+  for(let x=0;x<N;x++) for(let y=0;y<N;y++){
+    if(ocupada(x,y)) continue;
+    if(longeDaCabeca && Math.abs(x-c.x)+Math.abs(y-c.y) < longeDaCabeca) continue;
+    livres.push({x,y});
+  }
+  return livres.length ? livres[Math.floor(Math.random()*livres.length)] : null;
+}
+
+//=============================
+// LÓGICA (um passo do jogo)
+//=============================
+function passo(){
+  if(fila.length) dir = fila.shift();
+  const d = V[dir], cfg = DIF[dificuldade];
+  const c = { x: cobra[0].x + d.x, y: cobra[0].y + d.y };
+
+  if(cfg.atravessa){
+    c.x = (c.x + N) % N; c.y = (c.y + N) % N;
+  }else if(c.x < 0 || c.x >= N || c.y < 0 || c.y >= N){
+    return morrer();
+  }
+
+  const comeuMaca  = comida && c.x === comida.x && c.y === comida.y;
+  const comeuBonus = bonus  && c.x === bonus.x  && c.y === bonus.y;
+  const cresce = comeuMaca || comeuBonus;
+
+  // a ponta do rabo sai do lugar, então só conta como colisão se a cobra crescer
+  const corpo = cresce ? cobra : cobra.slice(0, -1);
+  if(corpo.some(p=>p.x===c.x&&p.y===c.y) || obst.some(p=>p.x===c.x&&p.y===c.y)){
+    return morrer();
+  }
+
+  cobra.unshift(c);
+  if(!cresce){ cobra.pop(); return; }
+
+  // ---- comeu algo ----
+  const agora = performance.now();
+  combo = (agora - ultimaComida < 4000) ? Math.min(combo + 1, 5) : 1;
+  ultimaComida = agora;
+
+  const ganho = (comeuBonus ? 5 : 1) * cfg.mult * combo;
+  pontos += ganho;
+  comidas++;
+
+  const px = c.x*T + T/2, py = c.y*T + T/2;
+  explodir(px, py, comeuBonus ? '#ffd400' : '#ff4d6d', comeuBonus ? 22 : 12);
+  textos.push({x:px, y:py, txt:'+'+ganho+(combo>1?' x'+combo:''), vida:900, max:900, cor: comeuBonus?'#ffd400':'#fff'});
+  comeuBonus ? somBonus() : somComer();
+
+  if(comeuMaca) comida = null;
+  if(comeuBonus) bonus = null;
+
+  // sobe de nível a cada 5 comidas
+  const novoNivel = 1 + Math.floor(comidas / 5);
+  if(novoNivel > nivel){
+    nivel = novoNivel;
+    somNivel();
+    textos.push({x:canvas.width/2, y:canvas.height/2-40, txt:'NÍVEL '+nivel, vida:1400, max:1400, cor:'#00f0ff', grande:true});
+    if(cfg.obstaculos){
+      const o = celulaLivre(4);
+      if(o) obst.push(o);
+    }
+  }
+
+  if(!comida) comida = celulaLivre();
+  if(!comida){ return terminar('vitoria'); }
+
+  // chance de surgir estrela dourada
+  if(!bonus && Math.random() < 0.2){
+    const b = celulaLivre(3);
+    if(b) bonus = { x:b.x, y:b.y, vida:6000 };
+  }
+
+  atualizarHUD();
+}
+
+function morrer(){
+  somMorrer();
+  tremer = 450;
+  explodir(cobra[0].x*T+T/2, cobra[0].y*T+T/2, '#00f0ff', 25);
+  terminar('fim');
+}
+
+function terminar(novoEstado){
+  estado = novoEstado;
+  if(pontos > recordes[dificuldade]){
+    recordes[dificuldade] = pontos;
+    novoRecorde = true;
+    try{ localStorage.setItem('recordesCobrinha', JSON.stringify(recordes)); }catch(e){}
+  }
+  atualizarHUD();
+  atualizarBotoes();
+}
+
+//=============================
+// EFEITOS
+//=============================
+function explodir(x, y, cor, qtd){
+  for(let i=0;i<qtd;i++){
+    const a = Math.random()*Math.PI*2, v = 40 + Math.random()*120;
+    particulas.push({x, y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, vida:500+Math.random()*300, max:800, cor});
+  }
+}
+function atualizarEfeitos(dt){
+  particulas.forEach(p=>{ p.x+=p.vx*dt/1000; p.y+=p.vy*dt/1000; p.vida-=dt; });
+  particulas = particulas.filter(p=>p.vida>0);
+  textos.forEach(t=>{ t.y -= 25*dt/1000; t.vida -= dt; });
+  textos = textos.filter(t=>t.vida>0);
+  if(tremer > 0) tremer -= dt;
+  if(bonus && estado==='jogando'){
+    bonus.vida -= dt;
+    if(bonus.vida <= 0) bonus = null;
+  }
+  // combo expira visualmente
+  if(estado==='jogando' && combo>1 && performance.now()-ultimaComida>4000){ combo = 1; atualizarHUD(); }
+}
+
+//=============================
+// HUD
+//=============================
+function atualizarHUD(){
+  $('pontos').textContent = pontos;
+  $('nivel').textContent = nivel;
+  $('recorde').textContent = recordes[dificuldade];
+  $('combo').textContent = combo > 1 ? '🔥 Combo x' + combo : '';
+}
+function atualizarBotoes(){
+  const emJogo = estado==='jogando' || estado==='pausado';
+  $('btnIniciar').textContent = (estado==='parado') ? 'Iniciar Jogo' : 'Reiniciar';
+  $('btnPausar').textContent = estado==='pausado' ? 'Continuar' : 'Pausar';
+  $('btnPausar').disabled = !emJogo;
+  document.querySelectorAll('.dif').forEach(b=>{
+    b.disabled = emJogo;
+    b.classList.toggle('ativo', b.dataset.dif === dificuldade);
+  });
+}
+
+//=============================
+// CONTROLES
+//=============================
+function mudarDirecao(nova){
+  if(estado !== 'jogando') return;
+  // compara com a última direção JÁ enfileirada (corrige o bug das viradas rápidas)
+  const ultima = fila.length ? fila[fila.length-1] : dir;
+  if(nova === ultima || nova === OPOSTA[ultima]) return;
+  if(fila.length < 2) fila.push(nova);
+}
+
+function pausarJogo(){
+  if(estado === 'jogando') estado = 'pausado';
+  else if(estado === 'pausado') estado = 'jogando';
+  else return;
+  acumulador = 0;
+  atualizarBotoes();
+}
+
+const MAPA_TECLAS = {
+  ArrowUp:'cima', ArrowDown:'baixo', ArrowLeft:'esquerda', ArrowRight:'direita',
+  w:'cima', s:'baixo', a:'esquerda', d:'direita', W:'cima', S:'baixo', A:'esquerda', D:'direita'
+};
+document.addEventListener('keydown', e=>{
+  if(MAPA_TECLAS[e.key]){
+    e.preventDefault();
+    if(estado === 'parado' || estado === 'fim' || estado === 'vitoria') return;
+    mudarDirecao(MAPA_TECLAS[e.key]);
+  }else if(e.key === ' '){
+    e.preventDefault();
+    pausarJogo();
+  }else if(e.key === 'Enter'){
+    e.preventDefault();
+    if(estado !== 'jogando' && estado !== 'pausado') iniciarJogo();
+  }
+});
+
+// botões
+$('btnIniciar').addEventListener('click', e=>{ iniciarJogo(); e.target.blur(); });
+$('btnPausar').addEventListener('click', e=>{ pausarJogo(); e.target.blur(); });
+$('btnSom').addEventListener('click', e=>{
+  somLigado = !somLigado;
+  e.target.textContent = 'Som: ' + (somLigado ? 'ligado' : 'desligado');
+  e.target.blur();
+});
+document.querySelectorAll('.dif').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    if(estado==='jogando' || estado==='pausado') return;
+    dificuldade = b.dataset.dif;
+    estado = 'parado';
+    atualizarHUD(); atualizarBotoes();
+  });
+});
+document.querySelectorAll('.tecla[data-dir]').forEach(t=>{
+  t.addEventListener('pointerdown', e=>{ e.preventDefault(); mudarDirecao(t.dataset.dir); });
+});
+
+// deslizar o dedo no canvas
+let toque = null;
+canvas.addEventListener('touchstart', e=>{ toque = {x:e.touches[0].clientX, y:e.touches[0].clientY}; }, {passive:true});
+canvas.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  if(!toque) return;
+  const dx = e.touches[0].clientX - toque.x, dy = e.touches[0].clientY - toque.y;
+  if(Math.max(Math.abs(dx),Math.abs(dy)) < 24) return;
+  mudarDirecao(Math.abs(dx) > Math.abs(dy) ? (dx>0?'direita':'esquerda') : (dy>0?'baixo':'cima'));
+  toque = {x:e.touches[0].clientX, y:e.touches[0].clientY};
+}, {passive:false});
+canvas.addEventListener('click', ()=>{
+  if(estado==='parado'||estado==='fim'||estado==='vitoria') iniciarJogo();
+  else if(estado==='pausado') pausarJogo();
+});
+
+// pausa automática ao trocar de aba
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden && estado==='jogando') pausarJogo(); });
+
+//=============================
+// DESENHO
+//=============================
+function retArredondado(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+
+function desenhar(agora){
+  ctx.save();
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.textAlign = 'center';
+
+  if(tremer > 0){
+    const f = tremer / 450 * 6;
+    ctx.translate((Math.random()-.5)*f, (Math.random()-.5)*f);
+  }
+
+  // fundo
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(-10, -10, canvas.width+20, canvas.height+20);
+
+  // grade (cor corrigida: antes era '#e0e0e', inválida)
+  ctx.strokeStyle = 'rgba(0,240,255,0.07)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for(let i=0;i<=N;i++){
+    ctx.moveTo(i*T, 0); ctx.lineTo(i*T, canvas.height);
+    ctx.moveTo(0, i*T); ctx.lineTo(canvas.width, i*T);
+  }
+  ctx.stroke();
+
+  if(cobra){
+    // obstáculos
+    obst.forEach(o=>{
+      ctx.fillStyle = '#4b5563';
+      retArredondado(o.x*T+1, o.y*T+1, T-2, T-2, 4); ctx.fill();
+      ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5; ctx.stroke();
+    });
+
+    // maçã
+    if(comida){
+      const cx = comida.x*T+T/2, cy = comida.y*T+T/2;
+      ctx.shadowColor = '#ff4d6d'; ctx.shadowBlur = 12;
+      ctx.fillStyle = '#dc3545';
+      ctx.beginPath(); ctx.arc(cx, cy+1, T/2-3, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(cx-1, cy-T/2+1, 2, 5);
+    }
+
+    // estrela dourada (pisca mais rápido quando está acabando)
+    if(bonus){
+      const piscar = bonus.vida < 2000 ? Math.floor(agora/120)%2 === 0 : true;
+      if(piscar){
+        const cx = bonus.x*T+T/2, cy = bonus.y*T+T/2, pulso = 1 + Math.sin(agora/150)*.12;
+        ctx.shadowColor = '#ffd400'; ctx.shadowBlur = 16;
+        ctx.fillStyle = '#ffd400';
+        ctx.beginPath();
+        for(let i=0;i<10;i++){
+          const r = (i%2 ? 4 : 9.5) * pulso, a = -Math.PI/2 + i*Math.PI/5;
+          ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+        }
+        ctx.closePath(); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    // cobra (gradiente do verde-neon ao escuro, do pescoço ao rabo)
+    for(let i=cobra.length-1;i>=0;i--){
+      const p = cobra[i], k = i / Math.max(cobra.length-1, 1);
+      ctx.fillStyle = i === 0 ? '#b6ff3b' : `hsl(${140 - k*20}, 80%, ${55 - k*22}%)`;
+      if(i === 0){ ctx.shadowColor = '#b6ff3b'; ctx.shadowBlur = 10; }
+      retArredondado(p.x*T+1, p.y*T+1, T-2, T-2, i===0 ? 7 : 5); ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    // olhos
+    const h = cobra[0], d = V[dir] || V.direita;
+    const hx = h.x*T+T/2, hy = h.y*T+T/2;
+    const px = -d.y, py = d.x;
+    ctx.fillStyle = '#001018';
+    [-1,1].forEach(s=>{
+      ctx.beginPath();
+      ctx.arc(hx + d.x*4 + px*s*4, hy + d.y*4 + py*s*4, 2.2, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  // partículas
+  particulas.forEach(p=>{
+    ctx.globalAlpha = Math.max(p.vida/p.max, 0);
+    ctx.fillStyle = p.cor;
+    ctx.fillRect(p.x-2, p.y-2, 4, 4);
+  });
+  ctx.globalAlpha = 1;
+
+  // textos flutuantes
+  textos.forEach(t=>{
+    ctx.globalAlpha = Math.min(t.vida/t.max*1.5, 1);
+    ctx.fillStyle = t.cor;
+    ctx.font = t.grande ? 'bold 34px Arial' : 'bold 15px Arial';
+    ctx.fillText(t.txt, t.x, t.y);
+  });
+  ctx.globalAlpha = 1;
+
+  // barra de tempo da estrela
+  if(bonus){
+    ctx.fillStyle = '#ffd400';
+    ctx.fillRect(0, canvas.height-3, canvas.width * bonus.vida/6000, 3);
+  }
+
+  ctx.restore();
+  ctx.textAlign = 'center';
+
+  // telas de mensagem
+  if(estado === 'parado'){
+    painel('🐍 COBRINHA', 'Dificuldade: ' + DIF[dificuldade].nome, 'Pressione Enter ou toque para começar');
+  }else if(estado === 'pausado'){
+    painel('PAUSADO', '', 'Espaço ou toque para continuar');
+  }else if(estado === 'fim'){
+    painel('FIM DE JOGO', 'Pontuação: ' + pontos + (novoRecorde ? '  🏆 Novo recorde!' : ''), 'Enter ou toque para jogar de novo');
+  }else if(estado === 'vitoria'){
+    painel('VOCÊ VENCEU! 🎉', 'Pontuação: ' + pontos + (novoRecorde ? '  🏆 Novo recorde!' : ''), 'Enter ou toque para jogar de novo');
+  }
+}
+
+function painel(titulo, sub, dica){
+  ctx.fillStyle = 'rgba(0,0,0,0.7)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 36px Arial';
+  ctx.fillText(titulo, canvas.width/2, canvas.height/2 - 20);
+  if(sub){
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = '20px Arial';
+    ctx.fillText(sub, canvas.width/2, canvas.height/2 + 20);
+  }
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = '14px Arial';
+  ctx.fillText(dica, canvas.width/2, canvas.height/2 + 60);
+}
+
+//=============================
+// LOOP PRINCIPAL (passo fixo + animação suave)
+//=============================
+function loop(agora){
+  const dt = Math.min(agora - ultimoTempo, 100);
+  ultimoTempo = agora;
+
+  if(estado === 'jogando'){
+    acumulador += dt;
+    const vel = velocidadeAtual();
+    while(acumulador >= vel && estado === 'jogando'){
+      acumulador -= vel;
+      passo();
+    }
+  }
+  atualizarEfeitos(dt);
+  desenhar(agora);
+  requestAnimationFrame(loop);
+}
+
+// inicialização
+cobra = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = 'direita'; fila = [];
+obst = []; particulas = []; textos = []; comida = null; bonus = null;
+atualizarHUD(); atualizarBotoes();
+requestAnimationFrame(t=>{ ultimoTempo = t; loop(t); });
+</script>
+</body>
 </html>
