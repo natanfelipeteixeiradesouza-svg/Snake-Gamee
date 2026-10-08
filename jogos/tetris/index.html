@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tetris</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <a class="voltar" href="../../">&larr; Menu de jogos</a>
+  <h1>&#129521; Tetris</h1>
+
+  <div class="jogo">
+    <canvas id="tabuleiro" width="300" height="600"></canvas>
+
+    <aside class="painel">
+      <div class="stat pontuacao">Pontos<b id="pontos">0</b></div>
+      <div class="stat nivel">Nível<b id="nivel">1</b></div>
+      <div class="stat linhas">Linhas<b id="linhas">0</b></div>
+      <div class="stat recorde">Recorde<b id="recorde">0</b></div>
+      <div class="mini">Próxima<canvas id="proxima" width="100" height="100"></canvas></div>
+      <div class="mini">Guardada (C)<canvas id="guardada" width="100" height="100"></canvas></div>
+    </aside>
+  </div>
+
+  <div>
+    <button id="btnIniciar">Iniciar Jogo</button>
+    <button id="btnPausar">Pausar</button>
+    <button id="btnSom">Som: ligado</button>
+  </div>
+
+  <div class="toque" aria-label="Controles de toque">
+    <button class="ctl" data-acao="esquerda" aria-label="Esquerda">&#9668;</button>
+    <button class="ctl" data-acao="girar" aria-label="Girar">&#8635;</button>
+    <button class="ctl" data-acao="direita" aria-label="Direita">&#9658;</button>
+    <button class="ctl" data-acao="baixo" aria-label="Descer">&#9660;</button>
+    <button class="ctl" data-acao="queda" aria-label="Queda rápida">&#10515;</button>
+    <button class="ctl" data-acao="guardar" aria-label="Guardar peça">&#9733;</button>
+  </div>
+
+  <div class="instrucoes">
+    <h3>Como jogar</h3>
+    <p>&larr; &rarr; ou A/D movem. &uarr; ou X gira, Z gira ao contrário.</p>
+    <p>&darr; ou S desce mais rápido. <b>Espaço</b> derruba a peça na hora.</p>
+    <p>C ou Shift guarda a peça (uma vez por peça). P pausa, Enter inicia.</p>
+    <p>Complete linhas para pontuar: 1, 2, 3 ou 4 de uma vez (Tetris!) valem mais. A cada 10 linhas o nível sobe e a queda acelera. Fazer Tetris em sequência dá bônus.</p>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

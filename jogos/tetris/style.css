@@ -1,0 +1,68 @@
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at top,#0f0f1a,#020617);
+  font-family:Arial,sans-serif;padding:16px;
+}
+.container{
+  text-align:center;background:rgba(15,23,42,.6);backdrop-filter:blur(10px);
+  padding:20px;border-radius:20px;box-shadow:0 0 40px #00f0ff33;
+  color:#e0f7ff;border:1px solid #00f0ff55;width:100%;max-width:520px;
+}
+h1{margin:0 0 10px;font-size:1.8em}
+.voltar{display:inline-block;margin-bottom:6px;color:#00f0ff;text-decoration:none;font-size:14px}
+.voltar:hover{text-decoration:underline}
+
+.jogo{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-bottom:12px}
+#tabuleiro{
+  border:3px solid #00f0ff;border-radius:10px;background:#01030a;
+  height:min(68vh,600px);width:auto;aspect-ratio:1/2;max-width:100%;
+  box-shadow:0 0 20px #00f0ff,inset 0 0 20px #00f0ff22;touch-action:none;
+}
+.painel{display:flex;flex-direction:column;gap:8px;width:110px}
+.stat{
+  background:#020617;border:1px solid #00f0ff55;border-radius:10px;padding:6px;
+  font-size:.75em;font-weight:bold;
+}
+.stat b{display:block;font-size:1.5em;margin-top:2px}
+.pontuacao{color:#00f0ff;text-shadow:0 0 8px #00f0ff}
+.nivel{color:#ffd400;text-shadow:0 0 8px #ffd400}
+.linhas{color:#3dff7a;text-shadow:0 0 8px #3dff7a}
+.recorde{color:#ff00c8;text-shadow:0 0 8px #ff00c8}
+.mini{font-size:.75em;font-weight:bold;color:#94a3b8}
+.mini canvas{
+  display:block;margin:4px auto 0;width:100px;height:100px;
+  background:#01030a;border:1px solid #00f0ff55;border-radius:8px;
+}
+
+button{
+  font-size:15px;cursor:pointer;background:linear-gradient(45deg,#00f0ff,#0066ff);
+  color:#001018;border:none;padding:10px 14px;border-radius:10px;margin:4px;
+  font-weight:bold;transition:.2s;box-shadow:0 0 10px #00f0ff88;
+}
+button:hover:not(:disabled){transform:scale(1.07);box-shadow:0 0 20px #00f0ff}
+button:focus-visible{outline:3px solid #ffd400;outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+
+.toque{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin:12px auto}
+.ctl{
+  width:64px;height:54px;margin:0;padding:0;font-size:22px;background:#020617;color:#00f0ff;
+  border:1px solid #00f0ff55;box-shadow:0 0 10px #00f0ff33;user-select:none;touch-action:manipulation;
+}
+.ctl:active{background:#00f0ff;color:#001018}
+
+.instrucoes{
+  margin:14px auto 0;padding:14px;max-width:380px;background:linear-gradient(45deg,#00f0ff,#ff00c8);
+  border-radius:12px;font-size:13px;color:#001018;box-shadow:0 0 20px #00f0ff55;text-align:left;
+}
+.instrucoes h3{margin:0 0 8px;color:#000}
+.instrucoes p{margin:5px 0}
+
+@media (max-width:520px){
+  .jogo{flex-direction:column;align-items:center}
+  .painel{order:-1;flex-direction:row;flex-wrap:wrap;justify-content:center;width:100%}
+  .stat{flex:1;min-width:70px}
+  .mini{display:none}
+  #tabuleiro{height:min(58vh,600px)}
+}
+@media (prefers-reduced-motion:reduce){button{transition:none}}

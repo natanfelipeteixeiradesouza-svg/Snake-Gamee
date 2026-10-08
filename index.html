@@ -57,12 +57,22 @@ footer{text-align:center;margin-top:40px;font-size:.8em;color:#64748b}
   <section class="jogos" aria-label="Lista de jogos">
 
     <!-- JOGO DISPONÍVEL -->
-    <a class="card" href="jogos/cobra.html">
+    <a class="card" href="jogos/cobrinha/">
       <span class="icone" aria-hidden="true">&#128013;</span>
       <h2>Jogo da Cobrinha</h2>
       <p>Coma maçãs, pegue estrelas, acumule combos e sobreviva a 3 níveis de dificuldade.</p>
       <div class="rodape">
         <span class="recorde" id="recorde-cobrinha"></span>
+        <span class="jogar">Jogar</span>
+      </div>
+    </a>
+
+    <a class="card" href="jogos/tetris/">
+      <span class="icone" aria-hidden="true">&#129521;</span>
+      <h2>Tetris</h2>
+      <p>Encaixe as peças, limpe linhas, guarde peças e faça Tetris para subir de nível.</p>
+      <div class="rodape">
+        <span class="recorde" id="recorde-tetris"></span>
         <span class="jogar">Jogar</span>
       </div>
     </a>
@@ -94,6 +104,10 @@ try{
   const r = JSON.parse(localStorage.getItem('recordesCobrinha') || '{}');
   const melhor = Math.max(0, ...Object.values(r).map(Number));
   if(melhor > 0) document.getElementById('recorde-cobrinha').textContent = '🏆 Recorde: ' + melhor;
+}catch(e){}
+try{
+  const t = Number(localStorage.getItem('recordeTetris')) || 0;
+  if(t > 0) document.getElementById('recorde-tetris').textContent = '🏆 Recorde: ' + t;
 }catch(e){}
 </script>
 </body>
