@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Jogos</title>
+<style>
+*{box-sizing:border-box}
+:root{--ciano:#00f0ff;--rosa:#ff00c8;--amarelo:#ffd400;--texto:#e0f7ff}
+body{
+  margin:0;min-height:100vh;color:var(--texto);font-family:Arial,sans-serif;
+  background:radial-gradient(circle at top,#0f0f1a,#020617);padding:32px 16px;
+}
+main{max-width:960px;margin:0 auto}
+header{text-align:center;margin-bottom:36px}
+h1{margin:0 0 8px;font-size:2.4em;color:var(--ciano);text-shadow:0 0 14px var(--ciano)}
+header p{margin:0;color:#94a3b8}
+
+.jogos{
+  display:grid;gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+}
+.card{
+  display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:16px;
+  text-decoration:none;color:inherit;background:rgba(15,23,42,.7);
+  border:1px solid #00f0ff55;box-shadow:0 0 24px #00f0ff22;
+  transition:transform .2s,box-shadow .2s;
+}
+a.card:hover,a.card:focus-visible{
+  transform:translateY(-4px);box-shadow:0 0 28px #00f0ff88;outline:none;
+}
+a.card:focus-visible{outline:3px solid var(--amarelo);outline-offset:3px}
+.icone{font-size:3em;line-height:1}
+.card h2{margin:0;font-size:1.3em;color:#fff}
+.card p{margin:0;font-size:.92em;color:#94a3b8;flex:1}
+.rodape{display:flex;justify-content:space-between;align-items:center;font-size:.85em}
+.recorde{color:var(--rosa);font-weight:bold}
+.jogar{
+  background:linear-gradient(45deg,var(--ciano),#0066ff);color:#001018;
+  font-weight:bold;padding:8px 14px;border-radius:10px;
+}
+.breve{opacity:.55;border-style:dashed;box-shadow:none}
+.etiqueta{color:var(--amarelo);font-weight:bold}
+
+footer{text-align:center;margin-top:40px;font-size:.8em;color:#64748b}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+@media (max-width:600px){h1{font-size:1.8em}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&#127918; Portal de Jogos</h1>
+    <p>Escolha um jogo e divirta-se.</p>
+  </header>
+
+  <section class="jogos" aria-label="Lista de jogos">
+
+    <!-- JOGO DISPONÍVEL -->
+    <a class="card" href="jogos/cobrinha/">
+      <span class="icone" aria-hidden="true">&#128013;</span>
+      <h2>Jogo da Cobrinha</h2>
+      <p>Coma maçãs, pegue estrelas, acumule combos e sobreviva a 3 níveis de dificuldade.</p>
+      <div class="rodape">
+        <span class="recorde" id="recorde-cobrinha"></span>
+        <span class="jogar">Jogar</span>
+      </div>
+    </a>
+
+    <!-- JOGOS FUTUROS (copie este bloco e troque o <div> por <a href="..."> quando estiver pronto) -->
+    <div class="card breve" aria-disabled="true">
+      <span class="icone" aria-hidden="true">&#129513;</span>
+      <h2>Jogo da Memória</h2>
+      <p>Encontre os pares de cartas no menor número de jogadas.</p>
+      <div class="rodape"><span class="etiqueta">Em breve</span></div>
+    </div>
+
+    <div class="card breve" aria-disabled="true">
+      <span class="icone" aria-hidden="true">&#10060;</span>
+      <h2>Jogo da Velha</h2>
+      <p>Desafie um amigo ou o computador.</p>
+      <div class="rodape"><span class="etiqueta">Em breve</span></div>
+    </div>
+
+  </section>
+
+  <footer>Feito com HTML, CSS e JavaScript.</footer>
+</main>
+
+<script>
+// Mostra o melhor recorde salvo pelo jogo da cobrinha (se existir).
+// Funciona porque o portal e o jogo ficam na mesma origem (mesmo site).
+try{
+  const r = JSON.parse(localStorage.getItem('recordesCobrinha') || '{}');
+  const melhor = Math.max(0, ...Object.values(r).map(Number));
+  if(melhor > 0) document.getElementById('recorde-cobrinha').textContent = '🏆 Recorde: ' + melhor;
+}catch(e){}
+</script>
+</body>
+</html>
